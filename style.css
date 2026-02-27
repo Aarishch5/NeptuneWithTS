@@ -1,0 +1,509 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+main {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+#left {
+  width: 21%;
+  height: 100vh;
+  border-width: 1px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 25px 25px 40px 25px;
+}
+
+#left-top {
+  display: flex;
+  flex-direction: column;
+  row-gap: 18px;
+  padding: 10px;
+}
+
+#box {
+  display: flex;
+  flex-direction: row;
+  column-gap: 25px;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #b5bdcd;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+#box-left {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#jessica-info h4 {
+  font: 16px;
+  font-weight: 600;
+  color: #2a2a2a;
+}
+
+#jessica-info h5 {
+  font: 12px;
+  font-weight: 400;
+  color: #626d82;
+}
+
+#main-nav {
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+}
+
+#navbar5 {
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+#navbar5 a {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  flex-direction: row;
+  gap: 10px;
+  font-family: "Spline Sans", sans-serif;
+  font-weight: 400;
+  color: #525865;
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 140%;
+  border-radius: 6px;
+}
+
+#navbar5 :nth-child(2) {
+  height: 6vh;
+  width: 16.4vw;
+  display: flex;
+  background-color: #d3f7b5;
+  border-radius: 6px;
+  padding-left: 10px;
+  align-items: center;
+}
+
+#navbar5 img {
+  height: 24px;
+  width: 24px;
+}
+
+#left-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding-left: 20px;
+  padding-right: 3px;
+}
+
+#left-bottom img {
+  width: 33px;
+  height: 33px;
+}
+
+#contact-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#left-bottom h2 {
+  font-family: "Spline Sans", sans-serif;
+  font-size: 24px;
+  color: #1f4451;
+  font-weight: 600;
+}
+
+#left-bottom h3 {
+  font-family: "Spline Sans", sans-serif;
+  font-size: 15px;
+  color: #626d82;
+  font-weight: 400;
+}
+
+#left-bottom #btn {
+  width: 100px;
+  height: fit-content;
+  padding-top: 9px;
+  padding-bottom: 8px;
+  background-color: #1f4451;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  border: none;
+}
+
+#right {
+  background-color: #ebebeb;
+  height: 100%;
+  width: 79%;
+  display: flex;
+  flex-direction: column;
+}
+
+#right-top {
+  height: 8%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 14px;
+  align-items: center;
+  padding-left: 60px;
+}
+
+#right-top img {
+  height: 9.99px;
+  width: 6px;
+  color: #d1d5db;
+}
+
+.middleHome, .middleDoc {
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.middleHome {
+  color: #436d7c;
+}
+
+.middleDoc {
+  color: #b5bdcd;
+}
+
+#right-middle {
+  width: 100%;
+  height: 8%;
+  width: 100%;
+  display: flex;
+  padding-left: 60px;
+  padding-right: 50px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#right-middle #doc {
+  width: 50%;
+}
+
+#right-middle #doc h2 {
+  font-family: "Zin Display", sans-serif;
+}
+
+#right-middle .addDeleteDocument {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  width: 20%;
+}
+
+.addDeleteDocument #multiDelete, #add {
+  height: 4vh;
+  width: 8vh;
+  border: 0.5px solid #b5bdcd;
+  border-radius: 6px;
+  background-color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+  color: #878b94;
+}
+
+#right-middle #search {
+  width: 30%;
+  display: flex;
+  justify-content: right;
+  padding-right: 0%;
+  align-items: center;
+}
+
+#right-middle form {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}
+
+#right-middle #search button {
+  position: relative;
+  right: 40px;
+  top: 4px;
+  cursor: pointer;
+  border: none;
+}
+
+#right-middle input {
+  height: 40px;
+  width: 280px;
+  border: 0.5px solid #b5bdcd;
+  border-radius: 5px;
+  color: #b5bdcd;
+  font-size: 16px;
+  font-family: "Spline Sans", sans-serif;
+  padding-left: 10px;
+}
+
+#right-middle form button {
+  width: 25px;
+  height: 25px;
+  right: -25px;
+  position: absolute;
+  background: transparent;
+  outline: none;
+}
+
+#doc h2 {
+  font-size: 33px;
+  font-weight: 600;
+  color: #2a2a2a;
+}
+
+#right-bottom {
+  height: 84%;
+  background-color: #ebebeb;
+  padding: 60px 80px;
+}
+
+.content-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#table-div {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid white;
+}
+
+table button {
+  border: none;
+}
+
+.btn5 {
+  padding: 2px 4px;
+  height: 34px;
+  width: 134px;
+  font-family: "Inter", sans-serif;
+  border-radius: 5px;
+  color: #626d82;
+  background-color: white;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  border: 1px solid #b5bdcd;
+}
+
+.status-completed, .status-pending, .status-needsSigning {
+  border-radius: 22px;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 6px 14px;
+  font-family: "Inter", sans-serif;
+}
+
+.status-needsSigning {
+  background-color: #436d7c;
+  color: #ffffff;
+}
+
+.status-completed {
+  background-color: #d3f7b5;
+  color: #1f4451;
+}
+
+table, th, td {
+  border-bottom: 1px solid #e8ecf1;
+}
+
+table {
+  background-color: #ffffff;
+}
+
+table th,td {
+  padding: 10px;
+  font-family: "Spline Sans", sans-serif;
+  text-align: left;
+}
+
+table tr select {
+  border-radius: 1vh;
+  color: #1f4451;
+  font-size: 12px;
+}
+
+.titleText {
+  font-size: 16px;
+  font-weight: 600;
+  color: #436d7c;
+  font-family: "Spline Sans", sans-serif;
+}
+
+.formBox {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  backdrop-filter: blur(1px);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  transform: scale(0);
+  transition:
+  transform 0.5 ease,
+  height 0.2s ease;
+}
+
+.formBox.active-popup {
+  transform: scale(1);}
+
+.addForm {
+  width: 420px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  border: 1px solid #2a2a2a;
+  background-color: #ffffff;
+  border-radius: 6px;
+}
+
+.addForm {
+  color: #1f4451;}
+
+.addForm form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;}
+
+.addCancel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2vh;
+}
+
+.addCancel button {
+  height: 4vh;
+  width: 8vh;
+  border: 1px solid #1f4451;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+ #addCancelForm .input1 {
+  display: flex;
+  flex-direction: column; 
+  gap: 10px;
+  font-size: 16px;
+}
+
+#addCancelForm .input1 input, #addCancelForm .input1 select {
+  height: 5vh;
+  padding: 10px;}
+
+.menubtn1 {
+  padding: 4px;
+  background: transparent;
+}
+
+.imgInTable {
+  height: 18px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.date span {
+  color: #626d82;
+  font-size: 12px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  z-index: 100;
+  padding: 5px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-menu button {
+  display: block;
+  width: 100%;
+  margin: 2px 0;
+  padding: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Spline Sans", sans-serif;
+}
+
+.status-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 6px;
+}
+
+.status-pill {
+  background-color: #e9edf3;
+  color: #626d82;
+  padding: 6px 8px;
+  border-radius: 22px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Inter", sans-serif;
+}
+
+.pending-subtext {
+  font-size: 14px;
+  font-style: italic;
+  color: #9aa4b2;
+  font-family: "Inter", sans-serif;
+}
+
+.pending-subtext strong {
+  font-weight: 600;
+  color: #5b677a;
+}
+
+.wrapBtnIcon {
+  display: flex;
+  align-items: center;
+  gap: 30px;              
+  position: relative;    
+  justify-content: end;
+}
+
+.chekBoxDiv{
+  display: flex;
+  flex-direction: row;
+}
+
+.cell3CSS{
+  color: #626d82;
+  font-family: "Inter",sans-serif;
+  font-size: 16px;
+  text-align: left;
+}

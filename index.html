@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <main>
+      <!-- Left Part -->
+
+      <div id="left">
+        <div id="left-top">
+          <div id="logo" style="color: #1f4451">
+            <img src="images/Union.svg" alt="" />
+          </div>
+          <div id="main-nav">
+            <div id="box">
+              <div id="box-left">
+                <div id="circle"><img src="images/Group79.svg" alt="" /></div>
+                <div id="jessica-info">
+                  <h4>Jessica Thompson</h4>
+                  <h5>Primary User</h5>
+                </div>
+              </div>
+              <div id="box-logo"><img src="images/iconRight.svg" alt="" /></div>
+            </div>
+
+            <div id="navbar5">
+              <a href="#Home"><img src="images/home.svg" alt="" /> Home</a>
+              <a href="#Documents"
+                ><img src="images/fileText.svg" alt="" /> Documents</a
+              >
+              <a href="#Chat"
+                ><img src="images/messageCircle.svg" alt="" /> Chat with
+                Neptune</a
+              >
+              <a href="#Help"
+                ><img src="images/helpCircle1.svg" alt="" /> Help</a
+              >
+              <a href="#Settings"
+                ><img src="images/settings.svg" alt="" /> Settings</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div id="left-bottom">
+          <img src="images/phone.svg" alt="" />
+          <div id="contact-text">
+            <h2>Having trouble</h2>
+            <h3>
+              Feel free to contact us and we will always help you through the
+              process.
+            </h3>
+          </div>
+          <button id="btn">Contact us</button>
+        </div>
+      </div>
+
+      <!-- Right Part -->
+
+      <div id="right">
+        <div id="right-top">
+          <a class="middleHome" href="#Home">Home</a>
+          <img src="images/Vector.svg" alt="" />
+          <a class="middleDoc" href="#Documents">Documents</a>
+        </div>
+
+        <div id="right-middle">
+          <div id="doc">
+            <h2>My Documents</h2>
+          </div>
+
+          <div class="addDeleteDocument">
+            <button id="add">Add</button>
+            <button id="multiDelete">Delete</button>
+          </div>
+
+          <div id="search">
+            <form
+              action=""
+              onsubmit="
+                event.preventDefault();
+                searchFunction();
+              "
+              autocomplete="off"
+            >
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Search documents"
+                name="q"
+              />
+              <button type="submit"><img src="images/Layer_1.svg" /></button>
+            </form>
+          </div>
+        </div>
+
+        <div id="right-bottom">
+          <div id="table-div">
+            <table class="content-table">
+              <thead>
+                <tr>
+                  <th>
+                    <div class="chekBoxDiv">
+                      <input type="checkbox" name="fff" />
+                      <img src="images/iconRight.svg" alt="" />
+                    </div>
+                  </th>
+                  <th>Document Name</th>
+                  <th>Status</th>
+                  <th>Last Modified</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="formBox">
+        <div class="addForm">
+          <h2>Add Document</h2>
+
+          <form
+            id="addCancelForm"
+            onsubmit="
+              event.preventDefault();
+              onFormSubmit();
+            "
+            autocomplete="off"
+          >
+            <div class="input1">
+              <label for="documentTitle"> Document Title</label>
+              <input
+                id="documentTitle"
+                type="text"
+                placeholder="Enter document title"
+              />
+            </div>
+
+            <div class="input1">
+              <label for="formStatus">Status</label>
+              <select id="formStatus">
+                <option>Select status</option>
+                <option>Needs Signing</option>
+                <option>Pending</option>
+                <option>Completed</option>
+              </select>
+            </div>
+
+            <div class="addCancel">
+              <button type="submit" class="form-add-button">Add</button>
+              <button type="button" class="form-cancel-button">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script src="dist/script.js"></script>
+  </body>
+</html>
