@@ -17,8 +17,15 @@ if (btnToCancelForm) {
   });
 }
 
-// key for the data local storage tabele
+// for Sanitization
+// import DOMPurify = require("dompurify");   
 
+// dompurify.d.ts
+declare const DOMPurify: {
+  sanitize: (dirty: string, config?: any) => string;
+};
+
+// key for the data local storage tabele
 const key: string = "tableData";
 
 function saveData(): void {
@@ -31,24 +38,31 @@ function addRowData(
   formStatus: string,
   docAddEditDate: number,
 ) {
+  
   tData.push({ id, doctitle, formStatus, docAddEditDate });
   saveData();
 }
 
 function onFormSubmit(): void {
-  const doctitle =
-    document.querySelector<HTMLInputElement>("#documentTitle")!.value;
-  const formStatus =
-    document.querySelector<HTMLSelectElement>("#formStatus")!.value;
+    const docTitleInput =
+      document.querySelector<HTMLInputElement>("#documentTitle")!.value;
+    const formStatusSelect  =
+      document.querySelector<HTMLSelectElement>("#formStatus")!.value;
+
+    
+
   const docAddEditDate: number = Date.now();
 
   let indexVal: number =
     document.querySelector<HTMLSelectElement>("#formStatus")!.selectedIndex;
 
-  if (doctitle.trim() === "" || indexVal === 0) {
+  if (docTitleInput.trim() === "" || indexVal === 0) {
     alert("empty Fields");
     return;
   }
+
+  const doctitle: string = DOMPurify.sanitize(docTitleInput);
+  const formStatus: string = DOMPurify.sanitize(formStatusSelect);
 
   if(editRowId){
     upDateRowData(doctitle, formStatus, docAddEditDate);
@@ -103,8 +117,7 @@ if (dataInLocalStorage) {
 }
 
 
-
-// Dtya render function
+// Dataa render function
 
 function dataRender(data: dataSet[]): void {
   data.forEach((element) => {

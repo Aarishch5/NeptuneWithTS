@@ -23,14 +23,16 @@ function addRowData(id, doctitle, formStatus, docAddEditDate) {
     saveData();
 }
 function onFormSubmit() {
-    const doctitle = document.querySelector("#documentTitle").value;
-    const formStatus = document.querySelector("#formStatus").value;
+    const docTitleInput = document.querySelector("#documentTitle").value;
+    const formStatusSelect = document.querySelector("#formStatus").value;
     const docAddEditDate = Date.now();
     let indexVal = document.querySelector("#formStatus").selectedIndex;
-    if (doctitle.trim() === "" || indexVal === 0) {
+    if (docTitleInput.trim() === "" || indexVal === 0) {
         alert("empty Fields");
         return;
     }
+    const doctitle = DOMPurify.sanitize(docTitleInput);
+    const formStatus = DOMPurify.sanitize(formStatusSelect);
     if (editRowId) {
         upDateRowData(doctitle, formStatus, docAddEditDate);
     }
@@ -70,7 +72,7 @@ if (dataInLocalStorage) {
         console.error("Error Occurred");
     }
 }
-// Dtya render function
+// Dataa render function
 function dataRender(data) {
     data.forEach((element) => {
         const table = document.querySelector(".content-table tbody");
@@ -196,9 +198,12 @@ function searchFunction() {
         }
         else if (searchInputValue.length > 0 && searchData.length === 0) {
             alert("No matched item");
-            dataRender(tData);
         }
     }
+}
+function reloadWindowAfterAlert() {
+    alert("No matched item");
+    window.location.reload();
 }
 function searchDataRender(searchData) {
     let tBody = document.querySelector("tBody");
