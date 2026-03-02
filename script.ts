@@ -56,7 +56,7 @@ function onFormSubmit(): void {
   if (docTitleInput.trim() === "" || indexVal === 0) {
     alert("empty Fields");
     return;
-  }
+  } 
 
   const doctitle: string = DOMPurify.sanitize(docTitleInput);
   const formStatus: string = DOMPurify.sanitize(formStatusSelect);
@@ -273,7 +273,7 @@ function searchFunction(): void {
     } else if (searchInputValue.length > 0 && searchData.length > 0) {
       searchDataRender(searchData);
     } else if (searchInputValue.length > 0 && searchData.length === 0) {
-      alert("No matched item");
+      reloadWindowAfterAlert();
     }
   }
 }
