@@ -71,6 +71,8 @@ function onFormSubmit(): void {
   rowInsert();
   formReset();
 
+  location.reload();
+
   return;
 }
 
@@ -93,6 +95,7 @@ function formReset(): void {
   if (ele2) {
     ele2.selectedIndex = 0;
   }
+
 }
 
 type dataSet = {
@@ -289,13 +292,10 @@ function searchDataRender(searchData: dataSet[]): void {
 }
 
 // Multi Delete Functionality
-
 let multiDeleteBtn = document.querySelector<HTMLButtonElement>("#multiDelete");
 
 if (multiDeleteBtn) {
   multiDeleteBtn.addEventListener("click", () => {
-    
-    
     // All delets using one main table checkbox
     const selectAllCheckbox =
       document.querySelector<HTMLInputElement>("#selectAllCheckbox");
@@ -306,19 +306,22 @@ if (multiDeleteBtn) {
         'table input[type="checkbox"]',
       );
 
+      if (checkBoxes.length === 1) {
+        alert("Add atleast one row");
+        return;
+      }
+
       checkBoxes.forEach((cBox) => {
-        cBox.checked = true;
+        cBox.checked = true;  
       });
     }
-
-
 
     const checkBoxes = document.querySelectorAll<HTMLInputElement>(
       'table input[type="checkbox"]:checked',
     );
 
     if (checkBoxes.length === 0) {
-      alert("Add atleast one row");
+      alert("Select atleast one row");
       return;
     }
 

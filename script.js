@@ -1,43 +1,41 @@
-"use strict";
-// Object.defineProperty(exports, "__esModule", { value: true }); 
-let formBox = document.querySelector(".formBox");
-let btnToCancelForm = document.querySelector(".form-cancel-button");
-let addBtn = document.querySelector("#add");
+var formBox = document.querySelector(".formBox");
+var btnToCancelForm = document.querySelector(".form-cancel-button");
+var addBtn = document.querySelector("#add");
 if (addBtn) {
-    addBtn.addEventListener("click", () => {
+    addBtn.addEventListener("click", function () {
         formBox.classList.add("active-popup");
     });
 }
 if (btnToCancelForm) {
-    btnToCancelForm.addEventListener("click", () => {
+    btnToCancelForm.addEventListener("click", function () {
         formBox.classList.remove("active-popup");
     });
 }
 // key for the data local storage tabele
-const key = "tableData";
+var key = "tableData";
 function saveData() {
     localStorage.setItem(key, JSON.stringify(tData));
 }
 function addRowData(id, doctitle, formStatus, docAddEditDate) {
-    tData.push({ id, doctitle, formStatus, docAddEditDate });
+    tData.push({ id: id, doctitle: doctitle, formStatus: formStatus, docAddEditDate: docAddEditDate });
     saveData();
 }
 function onFormSubmit() {
-    const docTitleInput = document.querySelector("#documentTitle").value;
-    const formStatusSelect = document.querySelector("#formStatus").value;
-    const docAddEditDate = Date.now();
-    let indexVal = document.querySelector("#formStatus").selectedIndex;
+    var docTitleInput = document.querySelector("#documentTitle").value;
+    var formStatusSelect = document.querySelector("#formStatus").value;
+    var docAddEditDate = Date.now();
+    var indexVal = document.querySelector("#formStatus").selectedIndex;
     if (docTitleInput.trim() === "" || indexVal === 0) {
         alert("empty Fields");
         return;
     }
-    const doctitle = DOMPurify.sanitize(docTitleInput);
-    const formStatus = DOMPurify.sanitize(formStatusSelect);
+    var doctitle = DOMPurify.sanitize(docTitleInput);
+    var formStatus = DOMPurify.sanitize(formStatusSelect);
     if (editRowId) {
         upDateRowData(doctitle, formStatus, docAddEditDate);
     }
     else {
-        const id = Date.now();
+        var id = Date.now();
         addRowData(id, doctitle, formStatus, docAddEditDate);
     }
     rowInsert();
@@ -46,7 +44,7 @@ function onFormSubmit() {
     return;
 }
 function rowInsert() {
-    const tBody = document.querySelector("tbody");
+    var tBody = document.querySelector("tbody");
     if (tBody) {
         tBody.innerHTML = "";
     }
@@ -54,17 +52,17 @@ function rowInsert() {
     formBox.classList.remove("active-popup");
 }
 function formReset() {
-    let ele1 = document.querySelector("documentTitle");
+    var ele1 = document.querySelector("documentTitle");
     if (ele1) {
         ele1.value = "";
     }
-    let ele2 = document.querySelector("formStatus");
+    var ele2 = document.querySelector("formStatus");
     if (ele2) {
         ele2.selectedIndex = 0;
     }
 }
-let tData = [];
-const dataInLocalStorage = localStorage.getItem(key);
+var tData = [];
+var dataInLocalStorage = localStorage.getItem(key);
 if (dataInLocalStorage) {
     try {
         tData = JSON.parse(dataInLocalStorage) || [];
@@ -75,23 +73,23 @@ if (dataInLocalStorage) {
 }
 // Dataa render function
 function dataRender(data) {
-    data.forEach((element) => {
-        const table = document.querySelector(".content-table tbody");
+    data.forEach(function (element) {
+        var table = document.querySelector(".content-table tbody");
         if (table) {
             // new tr Ele
-            const newRow = table.insertRow();
+            var newRow = table.insertRow();
             newRow.id = String(element.id);
             // cell 0
-            const cell0 = newRow.insertCell(0);
-            cell0.innerHTML = `<input id="${element.id}" type="checkbox">`;
+            var cell0 = newRow.insertCell(0);
+            cell0.innerHTML = "<input id=\"".concat(element.id, "\" type=\"checkbox\">");
             // cell 1
-            const cell1 = newRow.insertCell(1);
+            var cell1 = newRow.insertCell(1);
             cell1.textContent = element.doctitle;
             cell1.classList.add("titleText");
             // cell 2
-            const cell2 = newRow.insertCell(2);
-            const statusWrapper = document.createElement("div");
-            const statusSpan = document.createElement("span");
+            var cell2 = newRow.insertCell(2);
+            var statusWrapper = document.createElement("div");
+            var statusSpan = document.createElement("span");
             statusSpan.textContent = element.formStatus;
             if (element.formStatus === "Completed") {
                 statusSpan.classList.add("status-completed");
@@ -103,8 +101,8 @@ function dataRender(data) {
             }
             else if (element.formStatus === "Pending") {
                 statusSpan.classList.add("status-pill");
-                const subText = document.createElement("div");
-                subText.innerHTML = `Waiting for <strong>1 person</strong>`;
+                var subText = document.createElement("div");
+                subText.innerHTML = "Waiting for <strong>1 person</strong>";
                 subText.classList.add("pending-subtext");
                 statusWrapper.appendChild(statusSpan);
                 statusWrapper.appendChild(subText);
@@ -112,26 +110,26 @@ function dataRender(data) {
             }
             cell2.appendChild(statusWrapper);
             // Date / time
-            const cell3 = newRow.insertCell(3);
-            const formattedDate = new Date(element.docAddEditDate);
-            const formattedOnlyDate = formattedDate.toLocaleDateString("en-GB");
-            const currTime = formattedDate.toLocaleTimeString("en-US", {
+            var cell3 = newRow.insertCell(3);
+            var formattedDate = new Date(element.docAddEditDate);
+            var formattedOnlyDate = formattedDate.toLocaleDateString("en-GB");
+            var currTime = formattedDate.toLocaleTimeString("en-US", {
                 hour: "2-digit",
                 minute: "2-digit",
                 hour12: true,
             });
             cell3.appendChild(document.createTextNode(formattedOnlyDate));
             cell3.appendChild(document.createElement("br"));
-            const timeSpan = document.createElement("span");
+            var timeSpan = document.createElement("span");
             timeSpan.textContent = currTime;
             timeSpan.style.fontSize = "16px";
             cell3.classList.add("date");
             cell3.appendChild(timeSpan);
             cell3.classList.add("cell3CSS");
-            const cell4 = newRow.insertCell(4);
-            const wrapBtnIcon = document.createElement("div");
+            var cell4 = newRow.insertCell(4);
+            var wrapBtnIcon = document.createElement("div");
             wrapBtnIcon.classList.add("wrapBtnIcon");
-            const actionButton = document.createElement("button");
+            var actionButton = document.createElement("button");
             if (element.formStatus === "Completed") {
                 actionButton.textContent = "Download";
             }
@@ -142,62 +140,64 @@ function dataRender(data) {
                 actionButton.textContent = "Sign Now";
             }
             actionButton.classList.add("btn5");
-            let menuBtn = document.createElement("button");
+            var menuBtn = document.createElement("button");
             menuBtn.classList.add("menubtn1");
-            const img = document.createElement("img");
+            var img = document.createElement("img");
             img.src = "images/menuIcon.svg";
             img.classList.add("imgInTable");
             menuBtn.appendChild(img);
-            const dropdown = document.createElement("div");
-            dropdown.classList.add("dropdown-menu");
-            dropdown.style.display = "none";
-            const editBtn = document.createElement("button");
+            var dropdown_1 = document.createElement("div");
+            dropdown_1.classList.add("dropdown-menu");
+            dropdown_1.style.display = "none";
+            var editBtn = document.createElement("button");
             editBtn.textContent = "Edit";
             editBtn.id = String(element.id);
             editBtn.classList.add("edit-btn");
-            const deleteBtn = document.createElement("button");
+            var deleteBtn = document.createElement("button");
             deleteBtn.textContent = "Delete";
             deleteBtn.id = String(element.id);
             deleteBtn.classList.add("delete-btn");
-            dropdown.appendChild(editBtn);
-            dropdown.appendChild(deleteBtn);
+            dropdown_1.appendChild(editBtn);
+            dropdown_1.appendChild(deleteBtn);
             wrapBtnIcon.appendChild(actionButton);
             wrapBtnIcon.appendChild(menuBtn);
-            wrapBtnIcon.appendChild(dropdown);
+            wrapBtnIcon.appendChild(dropdown_1);
             cell4.appendChild(wrapBtnIcon);
-            menuBtn.addEventListener("click", (e) => {
+            menuBtn.addEventListener("click", function (e) {
                 e.stopPropagation(); // to prevnt Event Bubling
                 document
                     .querySelectorAll(".dropdown-menu")
-                    .forEach((d) => {
-                    if (d !== dropdown) {
+                    .forEach(function (d) {
+                    if (d !== dropdown_1) {
                         d.style.display = "none";
                     }
                 });
                 // toggle the currnt dropdown
-                dropdown.style.display =
-                    dropdown.style.display === "none" ? "block" : "none";
+                dropdown_1.style.display =
+                    dropdown_1.style.display === "none" ? "block" : "none";
             });
-            document.addEventListener("click", () => {
-                dropdown.style.display = "none";
+            document.addEventListener("click", function () {
+                dropdown_1.style.display = "none";
             });
         }
     });
 }
 // Search data rendering functionality
 function searchFunction() {
-    let searchInput = document.querySelector("#searchInput");
+    var searchInput = document.querySelector("#searchInput");
     if (searchInput) {
-        const searchInputValue = searchInput.value.trim().toLowerCase();
-        let searchData = tData.filter((ele) => String(ele.doctitle).trim().toLowerCase() ===
-            String(searchInputValue).toLowerCase());
-        if (searchInputValue.length === 0 && searchData.length === 0) {
+        var searchInputValue_1 = searchInput.value.trim().toLowerCase();
+        var searchData = tData.filter(function (ele) {
+            return String(ele.doctitle).trim().toLowerCase() ===
+                String(searchInputValue_1).toLowerCase();
+        });
+        if (searchInputValue_1.length === 0 && searchData.length === 0) {
             searchDataRender(tData);
         }
-        else if (searchInputValue.length > 0 && searchData.length > 0) {
+        else if (searchInputValue_1.length > 0 && searchData.length > 0) {
             searchDataRender(searchData);
         }
-        else if (searchInputValue.length > 0 && searchData.length === 0) {
+        else if (searchInputValue_1.length > 0 && searchData.length === 0) {
             alert("No matched item");
         }
     }
@@ -207,58 +207,58 @@ function reloadWindowAfterAlert() {
     window.location.reload();
 }
 function searchDataRender(searchData) {
-    let tBody = document.querySelector("tBody");
+    var tBody = document.querySelector("tBody");
     if (tBody) {
         tBody.innerHTML = "";
     }
     dataRender(searchData);
 }
 // Multi Delete Functionality
-let multiDeleteBtn = document.querySelector("#multiDelete");
+var multiDeleteBtn = document.querySelector("#multiDelete");
 if (multiDeleteBtn) {
-    multiDeleteBtn.addEventListener("click", () => {
+    multiDeleteBtn.addEventListener("click", function () {
         // All delets using one main table checkbox
-        const selectAllCheckbox = document.querySelector("#selectAllCheckbox");
-        const selectAllCheckboxValue = selectAllCheckbox?.checked;
+        var selectAllCheckbox = document.querySelector("#selectAllCheckbox");
+        var selectAllCheckboxValue = selectAllCheckbox === null || selectAllCheckbox === void 0 ? void 0 : selectAllCheckbox.checked;
         if (selectAllCheckboxValue) {
-            const checkBoxes = document.querySelectorAll('table input[type="checkbox"]');
-            if (checkBoxes.length === 1) {
+            var checkBoxes_1 = document.querySelectorAll('table input[type="checkbox"]');
+            if (checkBoxes_1.length === 1) {
                 alert("Add atleast one row");
                 return;
             }
-            checkBoxes.forEach((cBox) => {
+            checkBoxes_1.forEach(function (cBox) {
                 cBox.checked = true;
             });
         }
-        const checkBoxes = document.querySelectorAll('table input[type="checkbox"]:checked');
+        var checkBoxes = document.querySelectorAll('table input[type="checkbox"]:checked');
         if (checkBoxes.length === 0) {
             alert("Select atleast one row");
             return;
         }
         //  nodeLis
-        const checkBoxesIds = Array.from(checkBoxes, (ele) => ele.id);
-        tData = tData.filter((ele) => !checkBoxesIds.includes(String(ele.id)));
+        var checkBoxesIds = Array.from(checkBoxes, function (ele) { return ele.id; });
+        tData = tData.filter(function (ele) { return !checkBoxesIds.includes(String(ele.id)); });
         saveData();
         rowInsert();
     });
 }
 // Edit Functionality
-let editRowId = null;
-const tableBody = document.querySelector(".content-table tbody");
+var editRowId = null;
+var tableBody = document.querySelector(".content-table tbody");
 if (tableBody) {
     tableBody.addEventListener("click", function (e) {
-        const target = e.target;
+        var target = e.target;
         if (target instanceof HTMLElement) {
-            const editBtn = target.closest(".edit-btn");
+            var editBtn = target.closest(".edit-btn");
             if (editBtn) {
                 editRowId = editBtn.id;
                 putDataInForm(editRowId);
                 formBox.classList.add("active-popup");
             }
-            const deleteBtn = target.closest(".delete-btn");
+            var deleteBtn = target.closest(".delete-btn");
             if (deleteBtn) {
-                let deleteBtnId = deleteBtn.id;
-                tData = tData.filter((ele) => !deleteBtnId.includes(String(ele.id)));
+                var deleteBtnId_1 = deleteBtn.id;
+                tData = tData.filter(function (ele) { return !deleteBtnId_1.includes(String(ele.id)); });
                 saveData();
                 rowInsert();
             }
@@ -266,10 +266,10 @@ if (tableBody) {
     });
 }
 function putDataInForm(btnId) {
-    tData.forEach((ele) => {
+    tData.forEach(function (ele) {
         if (String(ele.id) === btnId) {
-            const docTitleInput = document.querySelector("#documentTitle");
-            const formStatusInput = document.querySelector("#formStatus");
+            var docTitleInput = document.querySelector("#documentTitle");
+            var formStatusInput = document.querySelector("#formStatus");
             if (docTitleInput) {
                 docTitleInput.value = ele.doctitle;
             }
@@ -280,7 +280,7 @@ function putDataInForm(btnId) {
     });
 }
 function upDateRowData(doctitle, formStatus, docAddEditDate) {
-    const row = tData.find((ele) => String(ele.id) === String(editRowId));
+    var row = tData.find(function (ele) { return String(ele.id) === String(editRowId); });
     // row not found
     if (!row)
         return;
@@ -291,7 +291,6 @@ function upDateRowData(doctitle, formStatus, docAddEditDate) {
     formReset();
     editRowId = null;
 }
-window.addEventListener("load", () => {
+window.addEventListener("load", function () {
     dataRender(tData);
 });
-//# sourceMappingURL=script.js.map
