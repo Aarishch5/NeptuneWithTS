@@ -7,7 +7,7 @@ let addBtn = document.querySelector<HTMLButtonElement>("#add");
 
 if (addBtn) {
   addBtn.addEventListener("click", () => {
-    formBox.classList.add("active-popup");  
+    formBox.classList.add("active-popup");
   });
 }
 
@@ -18,7 +18,7 @@ if (btnToCancelForm) {
 }
 
 // for Sanitization
-// import DOMPurify = require("dompurify");   
+// import DOMPurify = require("dompurify");
 
 // dompurify.d.ts
 declare const DOMPurify: {
@@ -38,18 +38,15 @@ function addRowData(
   formStatus: string,
   docAddEditDate: number,
 ) {
-  
   tData.push({ id, doctitle, formStatus, docAddEditDate });
   saveData();
 }
 
 function onFormSubmit(): void {
-    const docTitleInput =
-      document.querySelector<HTMLInputElement>("#documentTitle")!.value;
-    const formStatusSelect  =
-      document.querySelector<HTMLSelectElement>("#formStatus")!.value;
-
-    
+  const docTitleInput =
+    document.querySelector<HTMLInputElement>("#documentTitle")!.value;
+  const formStatusSelect =
+    document.querySelector<HTMLSelectElement>("#formStatus")!.value;
 
   const docAddEditDate: number = Date.now();
 
@@ -64,11 +61,11 @@ function onFormSubmit(): void {
   const doctitle: string = DOMPurify.sanitize(docTitleInput);
   const formStatus: string = DOMPurify.sanitize(formStatusSelect);
 
-  if(editRowId){
+  if (editRowId) {
     upDateRowData(doctitle, formStatus, docAddEditDate);
-  }else{
+  } else {
     const id: number = Date.now();
-     addRowData(id, doctitle, formStatus, docAddEditDate);
+    addRowData(id, doctitle, formStatus, docAddEditDate);
   }
 
   rowInsert();
@@ -86,14 +83,14 @@ function rowInsert(): void {
   formBox.classList.remove("active-popup");
 }
 
-function formReset(): void{
-  let ele1 = document.querySelector<HTMLInputElement>('documentTitle');
-  if(ele1){
+function formReset(): void {
+  let ele1 = document.querySelector<HTMLInputElement>("documentTitle");
+  if (ele1) {
     ele1.value = "";
   }
 
-  let ele2 = document.querySelector<HTMLSelectElement>('formStatus');
-  if(ele2){
+  let ele2 = document.querySelector<HTMLSelectElement>("formStatus");
+  if (ele2) {
     ele2.selectedIndex = 0;
   }
 }
@@ -110,12 +107,11 @@ let tData: dataSet[] = [];
 const dataInLocalStorage = localStorage.getItem(key);
 if (dataInLocalStorage) {
   try {
-    tData = JSON.parse(dataInLocalStorage) as dataSet[];
+    tData = JSON.parse(dataInLocalStorage) || [];
   } catch (error) {
     console.error("Error Occurred");
   }
 }
-
 
 // Dataa render function
 
@@ -160,7 +156,7 @@ function dataRender(data: dataSet[]): void {
 
         statusWrapper.appendChild(statusSpan);
         statusWrapper.appendChild(subText);
-        statusWrapper.classList.add('status-wrapper');
+        statusWrapper.classList.add("status-wrapper");
       }
 
       cell2.appendChild(statusWrapper);
@@ -279,8 +275,7 @@ function searchFunction(): void {
   }
 }
 
-
-function reloadWindowAfterAlert(): void{
+function reloadWindowAfterAlert(): void {
   alert("No matched item");
   window.location.reload();
 }
@@ -299,6 +294,25 @@ let multiDeleteBtn = document.querySelector<HTMLButtonElement>("#multiDelete");
 
 if (multiDeleteBtn) {
   multiDeleteBtn.addEventListener("click", () => {
+    
+    
+    // All delets using one main table checkbox
+    const selectAllCheckbox =
+      document.querySelector<HTMLInputElement>("#selectAllCheckbox");
+
+    const selectAllCheckboxValue = selectAllCheckbox?.checked;
+    if (selectAllCheckboxValue) {
+      const checkBoxes = document.querySelectorAll<HTMLInputElement>(
+        'table input[type="checkbox"]',
+      );
+
+      checkBoxes.forEach((cBox) => {
+        cBox.checked = true;
+      });
+    }
+
+
+
     const checkBoxes = document.querySelectorAll<HTMLInputElement>(
       'table input[type="checkbox"]:checked',
     );
@@ -330,20 +344,23 @@ const tableBody = document.querySelector<HTMLTableSectionElement>(
 
 if (tableBody) {
   tableBody.addEventListener("click", function (e: Event) {
-    const editBtn = (e.target as HTMLElement).closest(".edit-btn");
-    if (editBtn) {
-      editRowId = editBtn.id;
-      putDataInForm(editRowId);
+    const target = e.target;
+    if (target instanceof HTMLElement) {
+      const editBtn = target.closest(".edit-btn");
+      if (editBtn) {
+        editRowId = editBtn.id;
+        putDataInForm(editRowId);
 
-      formBox.classList.add("active-popup");
-    }
+        formBox.classList.add("active-popup");
+      }
 
-    const deleteBtn = (e.target as HTMLElement).closest(".delete-btn");
-    if (deleteBtn) {
-      let deleteBtnId: string = deleteBtn.id;
-      tData = tData.filter((ele) => !deleteBtnId.includes(String(ele.id)));
-      saveData();
-      rowInsert();
+      const deleteBtn = target.closest(".delete-btn");
+      if (deleteBtn) {
+        let deleteBtnId: string = deleteBtn.id;
+        tData = tData.filter((ele) => !deleteBtnId.includes(String(ele.id)));
+        saveData();
+        rowInsert();
+      }
     }
   });
 }
@@ -351,12 +368,11 @@ if (tableBody) {
 function putDataInForm(btnId: string): void {
   tData.forEach((ele) => {
     if (String(ele.id) === btnId) {
-      const docTitleInput = document.getElementById(
-        "documentTitle",
-      ) as HTMLInputElement | null;
-      const formStatusInput = document.getElementById(
-        "formStatus",
-      ) as HTMLInputElement | null;
+      const docTitleInput =
+        document.querySelector<HTMLInputElement>("#documentTitle");
+
+      const formStatusInput =
+        document.querySelector<HTMLInputElement>("#formStatus");
 
       if (docTitleInput) {
         docTitleInput.value = ele.doctitle;
@@ -376,17 +392,17 @@ function upDateRowData(
 ): void {
   const row = tData.find((ele) => String(ele.id) === String(editRowId));
 
-  if (!row) return; // row not found
+  // row not found
+  if (!row) return;
 
   row.doctitle = doctitle;
   row.formStatus = formStatus;
   row.docAddEditDate = docAddEditDate;
 
   saveData();
-  formReset()
+  formReset();
   editRowId = null;
 }
-
 
 window.addEventListener("load", () => {
   dataRender(tData);
