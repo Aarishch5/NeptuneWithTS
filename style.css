@@ -9,6 +9,12 @@ html, body {
   width: 100%;
 }
 
+:root {
+  --primary-color: #ffffff;
+  --primary-font-family: "Spline Sans", sans-serif;
+  --secondry-font-family: "Inter", sans-serif;
+}
+
 main {
   height: 100%;
   width: 100%;
@@ -19,7 +25,7 @@ main {
   width: 21%;
   height: 100vh;
   border-width: 1px;
-  background-color: #ffffff;
+  background-color: var(--primary-color);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -81,7 +87,7 @@ main {
   padding: 10px 12px;
   flex-direction: row;
   gap: 10px;
-  font-family: "Spline Sans", sans-serif;
+  font-family: var(--primary-font-family);
   font-weight: 400;
   color: #525865;
   text-decoration: none;
@@ -125,14 +131,14 @@ main {
 }
 
 #left-bottom h2 {
-  font-family: "Spline Sans", sans-serif;
+  font-family: var(--primary-font-family);
   font-size: 24px;
   color: #1f4451;
   font-weight: 600;
 }
 
 #left-bottom h3 {
-  font-family: "Spline Sans", sans-serif;
+  font-family: var(--primary-font-family);
   font-size: 15px;
   color: #626d82;
   font-weight: 400;
@@ -145,7 +151,7 @@ main {
   padding-bottom: 8px;
   background-color: #1f4451;
   border-radius: 5px;
-  color: white;
+  color: var(--primary-color);
   cursor: pointer;
   border: none;
 }
@@ -221,7 +227,7 @@ main {
   width: 8vh;
   border: 0.5px solid #b5bdcd;
   border-radius: 6px;
-  background-color: #ffffff;
+  background-color: var(--primary-color);
   font-size: 14px;
   cursor: pointer;
   color: #878b94;
@@ -256,7 +262,7 @@ main {
   border-radius: 5px;
   color: #b5bdcd;
   font-size: 16px;
-  font-family: "Spline Sans", sans-serif;
+  font-family: var(--primary-font-family);
   padding-left: 10px;
 }
 
@@ -289,7 +295,7 @@ main {
 #table-div {
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid white;
+  border: 1px solid var(--primary-color);
 }
 
 table button {
@@ -300,10 +306,10 @@ table button {
   padding: 2px 4px;
   height: 34px;
   width: 134px;
-  font-family: "Inter", sans-serif;
+  font-family: var(--secondry-font-family);
   border-radius: 5px;
   color: #626d82;
-  background-color: white;
+  background-color: var(--primary-color);
   cursor: pointer;
   font-weight: 500;
   font-size: 14px;
@@ -315,12 +321,12 @@ table button {
   font-weight: 500;
   font-size: 15px;
   padding: 6px 14px;
-  font-family: "Inter", sans-serif;
+  font-family: var(--secondry-font-family);
 }
 
 .status-needsSigning {
   background-color: #436d7c;
-  color: #ffffff;
+  color: var(--primary-color);
 }
 
 .status-completed {
@@ -333,12 +339,12 @@ table, th, td {
 }
 
 table {
-  background-color: #ffffff;
+  background-color: var(--primary-color);
 }
 
-table th,td {
+table th, td {
   padding: 10px;
-  font-family: "Spline Sans", sans-serif;
+  font-family: var(--primary-font-family);
   text-align: left;
 }
 
@@ -352,7 +358,7 @@ table tr select {
   font-size: 16px;
   font-weight: 600;
   color: #436d7c;
-  font-family: "Spline Sans", sans-serif;
+  font-family: var(--primary-font-family);
 }
 
 .formBox {
@@ -368,12 +374,13 @@ table tr select {
   overflow: hidden;
   transform: scale(0);
   transition:
-  transform 0.5 ease,
-  height 0.2s ease;
+    transform 0.5 ease,
+    height 0.2s ease;
 }
 
 .formBox.active-popup {
-  transform: scale(1);}
+  transform: scale(1);
+}
 
 .addForm {
   width: 420px;
@@ -382,17 +389,19 @@ table tr select {
   flex-direction: column;
   gap: 30px;
   border: 1px solid #2a2a2a;
-  background-color: #ffffff;
+  background-color: var(--primary-color);
   border-radius: 6px;
 }
 
 .addForm {
-  color: #1f4451;}
+  color: #1f4451;
+}
 
 .addForm form {
   display: flex;
   flex-direction: column;
-  gap: 20px;}
+  gap: 20px;
+}
 
 .addCancel {
   display: flex;
@@ -406,21 +415,22 @@ table tr select {
   height: 4vh;
   width: 8vh;
   border: 1px solid #1f4451;
-  background-color: white;
+  background-color: var(--primary-color);
   cursor: pointer;
   border-radius: 6px;
 }
 
- #addCancelForm .input1 {
+#addCancelForm .input1 {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   gap: 10px;
   font-size: 16px;
 }
 
 #addCancelForm .input1 input, #addCancelForm .input1 select {
   height: 5vh;
-  padding: 10px;}
+  padding: 10px;
+}
 
 .menubtn1 {
   padding: 4px;
@@ -441,7 +451,7 @@ table tr select {
 
 .dropdown-menu {
   position: absolute;
-  background-color: white;
+  background-color: var(--primary-color);
   border: 1px solid #ccc;
   z-index: 100;
   padding: 5px;
@@ -456,7 +466,7 @@ table tr select {
   padding: 5px;
   border-radius: 8px;
   cursor: pointer;
-  font-family: "Spline Sans", sans-serif;
+  font-family: var(--primary-font-family);
 }
 
 .status-wrapper {
@@ -473,14 +483,14 @@ table tr select {
   border-radius: 22px;
   font-size: 14px;
   font-weight: 500;
-  font-family: "Inter", sans-serif;
+  font-family: var(--secondry-font-family);
 }
 
 .pending-subtext {
   font-size: 14px;
   font-style: italic;
   color: #9aa4b2;
-  font-family: "Inter", sans-serif;
+  font-family: var(--secondry-font-family);
 }
 
 .pending-subtext strong {
@@ -491,19 +501,19 @@ table tr select {
 .wrapBtnIcon {
   display: flex;
   align-items: center;
-  gap: 30px;              
-  position: relative;    
+  gap: 30px;
+  position: relative;
   justify-content: end;
 }
 
-.chekBoxDiv{
+.chekBoxDiv {
   display: flex;
   flex-direction: row;
 }
 
-.cell3CSS{
+.cell3CSS {
   color: #626d82;
-  font-family: "Inter",sans-serif;
+  font-family: var(--secondry-font-family);
   font-size: 16px;
   text-align: left;
 }
