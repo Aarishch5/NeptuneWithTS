@@ -213,12 +213,20 @@ function searchDataRender(searchData) {
     }
     dataRender(searchData);
 }
+const selectAllCheckbox = document.querySelector("#selectAllCheckbox");
+if (selectAllCheckbox) {
+    selectAllCheckbox.addEventListener("change", function () {
+        const checkBoxes = document.querySelectorAll('tbody input[type="checkbox"]');
+        checkBoxes.forEach((ele) => {
+            ele.checked = selectAllCheckbox.checked;
+        });
+    });
+}
 // Multi Delete Functionality
 let multiDeleteBtn = document.querySelector("#multiDelete");
 if (multiDeleteBtn) {
     multiDeleteBtn.addEventListener("click", () => {
         // All delets using one main table checkbox
-        const selectAllCheckbox = document.querySelector("#selectAllCheckbox");
         const selectAllCheckboxValue = selectAllCheckbox?.checked;
         if (selectAllCheckboxValue) {
             const checkBoxes = document.querySelectorAll('table input[type="checkbox"]');
@@ -281,9 +289,10 @@ function putDataInForm(btnId) {
 }
 function upDateRowData(doctitle, formStatus, docAddEditDate) {
     const row = tData.find((ele) => String(ele.id) === String(editRowId));
-    // row not found
-    if (!row)
+    // if  row not found
+    if (!row) {
         return;
+    }
     row.doctitle = doctitle;
     row.formStatus = formStatus;
     row.docAddEditDate = docAddEditDate;

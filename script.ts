@@ -56,7 +56,7 @@ function onFormSubmit(): void {
   if (docTitleInput.trim() === "" || indexVal === 0) {
     alert("empty Fields");
     return;
-  } 
+  }
 
   const doctitle: string = DOMPurify.sanitize(docTitleInput);
   const formStatus: string = DOMPurify.sanitize(formStatusSelect);
@@ -95,7 +95,6 @@ function formReset(): void {
   if (ele2) {
     ele2.selectedIndex = 0;
   }
-
 }
 
 type dataSet = {
@@ -291,14 +290,27 @@ function searchDataRender(searchData: dataSet[]): void {
   dataRender(searchData);
 }
 
+const selectAllCheckbox =
+      document.querySelector<HTMLInputElement>("#selectAllCheckbox");
+
+
+if(selectAllCheckbox){
+  selectAllCheckbox.addEventListener("change",function(){
+    const checkBoxes = document.querySelectorAll<HTMLInputElement>('tbody input[type="checkbox"]');
+
+    checkBoxes.forEach((ele) => {
+        ele.checked = selectAllCheckbox.checked;
+    })
+  })
+}
+
 // Multi Delete Functionality
 let multiDeleteBtn = document.querySelector<HTMLButtonElement>("#multiDelete");
 
 if (multiDeleteBtn) {
   multiDeleteBtn.addEventListener("click", () => {
     // All delets using one main table checkbox
-    const selectAllCheckbox =
-      document.querySelector<HTMLInputElement>("#selectAllCheckbox");
+    
 
     const selectAllCheckboxValue = selectAllCheckbox?.checked;
     if (selectAllCheckboxValue) {
@@ -312,7 +324,7 @@ if (multiDeleteBtn) {
       }
 
       checkBoxes.forEach((cBox) => {
-        cBox.checked = true;  
+        cBox.checked = true;
       });
     }
 
@@ -384,7 +396,7 @@ function putDataInForm(btnId: string): void {
       if (formStatusInput) {
         formStatusInput.value = ele.formStatus;
       }
-    }
+    } 
   });
 }
 
@@ -395,8 +407,10 @@ function upDateRowData(
 ): void {
   const row = tData.find((ele) => String(ele.id) === String(editRowId));
 
-  // row not found
-  if (!row) return;
+  // if  row not found
+  if (!row){
+    return;
+  }
 
   row.doctitle = doctitle;
   row.formStatus = formStatus;
