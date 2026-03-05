@@ -17,10 +17,6 @@ if (btnToCancelForm) {
   });
 }
 
-// for Sanitization
-// import DOMPurify = require("dompurify");
-
-// dompurify.d.ts
 declare const DOMPurify: {
   sanitize: (dirty: string, config?: any) => string;
 };
@@ -291,17 +287,18 @@ function searchDataRender(searchData: dataSet[]): void {
 }
 
 const selectAllCheckbox =
-      document.querySelector<HTMLInputElement>("#selectAllCheckbox");
+  document.querySelector<HTMLInputElement>("#selectAllCheckbox");
 
-
-if(selectAllCheckbox){
-  selectAllCheckbox.addEventListener("change",function(){
-    const checkBoxes = document.querySelectorAll<HTMLInputElement>('tbody input[type="checkbox"]');
+if (selectAllCheckbox) {
+  selectAllCheckbox.addEventListener("change", function () {
+    const checkBoxes = document.querySelectorAll<HTMLInputElement>(
+      'tbody input[type="checkbox"]'
+    );
 
     checkBoxes.forEach((ele) => {
-        ele.checked = selectAllCheckbox.checked;
-    })
-  })
+      ele.checked = selectAllCheckbox.checked;
+    });
+  });
 }
 
 // Multi Delete Functionality
@@ -310,7 +307,6 @@ let multiDeleteBtn = document.querySelector<HTMLButtonElement>("#multiDelete");
 if (multiDeleteBtn) {
   multiDeleteBtn.addEventListener("click", () => {
     // All delets using one main table checkbox
-    
 
     const selectAllCheckboxValue = selectAllCheckbox?.checked;
     if (selectAllCheckboxValue) {
@@ -365,7 +361,6 @@ if (tableBody) {
       if (editBtn) {
         editRowId = editBtn.id;
         putDataInForm(editRowId);
-
         formBox.classList.add("active-popup");
       }
 
@@ -396,7 +391,7 @@ function putDataInForm(btnId: string): void {
       if (formStatusInput) {
         formStatusInput.value = ele.formStatus;
       }
-    } 
+    }
   });
 }
 
@@ -408,7 +403,7 @@ function upDateRowData(
   const row = tData.find((ele) => String(ele.id) === String(editRowId));
 
   // if  row not found
-  if (!row){
+  if (!row) {
     return;
   }
 
