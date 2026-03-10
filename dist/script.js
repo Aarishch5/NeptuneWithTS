@@ -44,7 +44,6 @@ function onFormSubmit() {
     }
     rowInsert();
     formReset(docTitleInput, formStatusSelect);
-    // location.reload();
     return;
 }
 function rowInsert() {
@@ -56,18 +55,12 @@ function rowInsert() {
     formBox.classList.remove("active-popup");
 }
 function formReset(ele1, ele2) {
-    // let ele1 = document.querySelector<HTMLInputElement>("documentTitle")!.value;
-    console.log({ ele1 });
     if (ele1) {
         ele1.value = "";
     }
-    console.log({ ele1 });
-    // let ele2 = document.querySelector<HTMLSelectElement>("form formStatus");
-    console.log({ ele2 });
     if (ele2) {
         ele2.selectedIndex = 0;
     }
-    console.log("FORM RESET");
 }
 let tData = [];
 const dataInLocalStorage = localStorage.getItem(key);

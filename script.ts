@@ -87,20 +87,14 @@ function rowInsert(): void {
 function formReset(
   ele1: HTMLInputElement | null,
   ele2: HTMLSelectElement | null,
-): void {
-  // let ele1 = document.querySelector<HTMLInputElement>("documentTitle")!.value;
-  console.log({ ele1 });
+) {
   if (ele1) {
     ele1.value = "";
   }
-  console.log({ ele1 });
 
-  // let ele2 = document.querySelector<HTMLSelectElement>("form formStatus");
-  console.log({ ele2 });
   if (ele2) {
     ele2.selectedIndex = 0;
   }
-  console.log("FORM RESET");
 }
 
 type dataSet = {
