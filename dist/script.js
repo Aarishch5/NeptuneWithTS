@@ -23,16 +23,18 @@ function addRowData(id, doctitle, formStatus, docAddEditDate) {
     saveData();
 }
 function onFormSubmit() {
-    const docTitleInput = document.querySelector("#documentTitle").value;
-    const formStatusSelect = document.querySelector("#formStatus").value;
+    const docTitleInput = document.querySelector("#documentTitle");
+    const docTitle = docTitleInput?.value;
+    const formStatusSelect = document.querySelector("#formStatus");
+    const formStatusValue = document.querySelector("#formStatus").value;
     const docAddEditDate = Date.now();
     let indexVal = document.querySelector("#formStatus").selectedIndex;
-    if (docTitleInput.trim() === "" || indexVal === 0) {
+    if (docTitle?.trim() === "" || indexVal === 0) {
         alert("empty Fields");
         return;
     }
-    const doctitle = DOMPurify.sanitize(docTitleInput);
-    const formStatus = DOMPurify.sanitize(formStatusSelect);
+    const doctitle = DOMPurify.sanitize(docTitle || "");
+    const formStatus = DOMPurify.sanitize(formStatusValue);
     if (editRowId) {
         upDateRowData(doctitle, formStatus, docAddEditDate);
     }
@@ -41,8 +43,8 @@ function onFormSubmit() {
         addRowData(id, doctitle, formStatus, docAddEditDate);
     }
     rowInsert();
-    formReset();
-    location.reload();
+    formReset(docTitleInput, formStatusSelect);
+    // location.reload();
     return;
 }
 function rowInsert() {
@@ -53,15 +55,19 @@ function rowInsert() {
     dataRender(tData);
     formBox.classList.remove("active-popup");
 }
-function formReset() {
-    let ele1 = document.querySelector("documentTitle");
+function formReset(ele1, ele2) {
+    // let ele1 = document.querySelector<HTMLInputElement>("documentTitle")!.value;
+    console.log({ ele1 });
     if (ele1) {
         ele1.value = "";
     }
-    let ele2 = document.querySelector("formStatus");
+    console.log({ ele1 });
+    // let ele2 = document.querySelector<HTMLSelectElement>("form formStatus");
+    console.log({ ele2 });
     if (ele2) {
         ele2.selectedIndex = 0;
     }
+    console.log("FORM RESET");
 }
 let tData = [];
 const dataInLocalStorage = localStorage.getItem(key);
@@ -297,7 +303,9 @@ function upDateRowData(doctitle, formStatus, docAddEditDate) {
     row.formStatus = formStatus;
     row.docAddEditDate = docAddEditDate;
     saveData();
-    formReset();
+    const docTitleInput = document.querySelector("#documentTitle");
+    const formStatusSelect = document.querySelector("#formStatus");
+    const formStatusValue = formReset(docTitleInput, formStatusSelect);
     editRowId = null;
 }
 window.addEventListener("load", () => {

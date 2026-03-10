@@ -40,8 +40,11 @@ function addRowData(
 
 function onFormSubmit(): void {
   const docTitleInput =
-    document.querySelector<HTMLInputElement>("#documentTitle")!.value;
+    document.querySelector<HTMLInputElement>("#documentTitle");
+  const docTitle = docTitleInput?.value;
   const formStatusSelect =
+    document.querySelector<HTMLSelectElement>("#formStatus");
+  const formStatusValue =
     document.querySelector<HTMLSelectElement>("#formStatus")!.value;
 
   const docAddEditDate: number = Date.now();
@@ -49,13 +52,13 @@ function onFormSubmit(): void {
   let indexVal: number =
     document.querySelector<HTMLSelectElement>("#formStatus")!.selectedIndex;
 
-  if (docTitleInput.trim() === "" || indexVal === 0) {
+  if (docTitle?.trim() === "" || indexVal === 0) {
     alert("empty Fields");
     return;
   }
 
-  const doctitle: string = DOMPurify.sanitize(docTitleInput);
-  const formStatus: string = DOMPurify.sanitize(formStatusSelect);
+  const doctitle: string = DOMPurify.sanitize(docTitle || "");
+  const formStatus: string = DOMPurify.sanitize(formStatusValue);
 
   if (editRowId) {
     upDateRowData(doctitle, formStatus, docAddEditDate);
@@ -65,9 +68,9 @@ function onFormSubmit(): void {
   }
 
   rowInsert();
-  formReset();
+  formReset(docTitleInput, formStatusSelect);
 
-  location.reload();
+  // location.reload();
 
   return;
 }
@@ -81,16 +84,23 @@ function rowInsert(): void {
   formBox.classList.remove("active-popup");
 }
 
-function formReset(): void {
-  let ele1 = document.querySelector<HTMLInputElement>("documentTitle");
+function formReset(
+  ele1: HTMLInputElement | null,
+  ele2: HTMLSelectElement | null,
+): void {
+  // let ele1 = document.querySelector<HTMLInputElement>("documentTitle")!.value;
+  console.log({ ele1 });
   if (ele1) {
     ele1.value = "";
   }
+  console.log({ ele1 });
 
-  let ele2 = document.querySelector<HTMLSelectElement>("formStatus");
+  // let ele2 = document.querySelector<HTMLSelectElement>("form formStatus");
+  console.log({ ele2 });
   if (ele2) {
     ele2.selectedIndex = 0;
   }
+  console.log("FORM RESET");
 }
 
 type dataSet = {
@@ -292,7 +302,7 @@ const selectAllCheckbox =
 if (selectAllCheckbox) {
   selectAllCheckbox.addEventListener("change", function () {
     const checkBoxes = document.querySelectorAll<HTMLInputElement>(
-      'tbody input[type="checkbox"]'
+      'tbody input[type="checkbox"]',
     );
 
     checkBoxes.forEach((ele) => {
@@ -348,7 +358,7 @@ if (multiDeleteBtn) {
 
 // Edit Functionality
 
-let editRowId: string | number | null = null;
+let editRowId: string | null = null;
 const tableBody = document.querySelector<HTMLTableSectionElement>(
   ".content-table tbody",
 );
@@ -412,7 +422,11 @@ function upDateRowData(
   row.docAddEditDate = docAddEditDate;
 
   saveData();
-  formReset();
+  const docTitleInput =
+    document.querySelector<HTMLInputElement>("#documentTitle");
+  const formStatusSelect =
+    document.querySelector<HTMLSelectElement>("#formStatus");
+  const formStatusValue = formReset(docTitleInput, formStatusSelect);
   editRowId = null;
 }
 
