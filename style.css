@@ -197,7 +197,6 @@ main {
 #right-middle {
   width: 100%;
   height: 8%;
-  width: 100%;
   display: flex;
   padding-left: 60px;
   padding-right: 50px;
@@ -213,18 +212,25 @@ main {
   font-family: "Zin Display", sans-serif;
 }
 
-#right-middle .addDeleteDocument {
+#right-middle-right {
+  height: 100%;
   display: flex;
-  flex-direction: row;
-  gap: 20px;
   align-items: center;
-  justify-content: center;
-  width: 20%;
+  gap: 15px;
+  padding-right: 28px;
 }
 
-.addDeleteDocument #multiDelete, #add {
-  height: 4vh;
-  width: 8vh;
+#right-middle-right .addDeleteDocument {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+
+#right-middle-right #multiDelete,
+#right-middle-right #add {
+  height: 36px;
+  width: 80px;
   border: 0.5px solid #b5bdcd;
   border-radius: 6px;
   background-color: var(--primary-color);
@@ -234,26 +240,16 @@ main {
 }
 
 #right-middle #search {
-  width: 30%;
   display: flex;
-  justify-content: right;
-  padding-right: 0%;
   align-items: center;
 }
 
 #right-middle form {
   display: flex;
   align-items: center;
-  justify-content: right;
+  position: relative;
 }
 
-#right-middle #search button {
-  position: relative;
-  right: 40px;
-  top: 4px;
-  cursor: pointer;
-  border: none;
-}
 
 #right-middle input {
   height: 40px;
@@ -266,13 +262,15 @@ main {
   padding-left: 10px;
 }
 
+/* Search button */
 #right-middle form button {
   width: 25px;
   height: 25px;
-  right: -25px;
   position: absolute;
+  right: 10px;
   background: transparent;
-  outline: none;
+  border: none;
+  cursor: pointer;
 }
 
 #doc h2 {

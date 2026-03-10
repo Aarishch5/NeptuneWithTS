@@ -75,29 +75,24 @@
             <h2>My Documents</h2>
           </div>
 
-          <div class="addDeleteDocument">
+          
+          <div id="right-middle-right">
+            <div class="addDeleteDocument">
             <button id="add">Add</button>
             <button id="multiDelete">Delete</button>
           </div>
 
           <div id="search">
-            <form
-              action=""
-              onsubmit="
-                event.preventDefault();
-                searchFunction();
-              "
-              autocomplete="off"
-            >
-              <input
-                id="searchInput"
-                type="text"
-                placeholder="Search documents"
-                name="q"
-              />
+            <form action="" onsubmit="event.preventDefault();searchFunction();"
+              autocomplete="off">
+              <input id="searchInput" type="text" placeholder="Search documents" name="q"/>
               <button type="submit"><img src="images/Layer_1.svg" /></button>
             </form>
           </div>
+          </div>
+
+          
+
         </div>
 
         <div id="right-bottom">
