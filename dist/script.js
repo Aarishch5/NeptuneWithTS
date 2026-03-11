@@ -3,12 +3,12 @@
 let formBox = document.querySelector(".formBox");
 let btnToCancelForm = document.querySelector(".form-cancel-button");
 let addBtn = document.querySelector("#add");
-if (addBtn) {
+if (addBtn && formBox) {
     addBtn.addEventListener("click", () => {
         formBox.classList.add("active-popup");
     });
 }
-if (btnToCancelForm) {
+if (btnToCancelForm && formBox) {
     btnToCancelForm.addEventListener("click", () => {
         formBox.classList.remove("active-popup");
     });
@@ -26,25 +26,30 @@ function onFormSubmit() {
     const docTitleInput = document.querySelector("#documentTitle");
     const docTitle = docTitleInput?.value;
     const formStatusSelect = document.querySelector("#formStatus");
-    const formStatusValue = document.querySelector("#formStatus").value;
+    const formStatusValue = document.querySelector("#formStatus")?.value;
     const docAddEditDate = Date.now();
-    let indexVal = document.querySelector("#formStatus").selectedIndex;
+    let indexVal = -1;
+    let index1 = document.querySelector("#formStatus");
+    if (index1) {
+        indexVal = index1?.selectedIndex;
+    }
     if (docTitle?.trim() === "" || indexVal === 0) {
         alert("empty Fields");
         return;
     }
     const doctitle = DOMPurify.sanitize(docTitle || "");
-    const formStatus = DOMPurify.sanitize(formStatusValue);
-    if (editRowId) {
-        upDateRowData(doctitle, formStatus, docAddEditDate);
-    }
-    else {
-        const id = Date.now();
-        addRowData(id, doctitle, formStatus, docAddEditDate);
+    if (formStatusValue) {
+        const formStatus = DOMPurify.sanitize(formStatusValue);
+        if (editRowId) {
+            upDateRowData(doctitle, formStatus, docAddEditDate);
+        }
+        else {
+            const id = Date.now();
+            addRowData(id, doctitle, formStatus, docAddEditDate);
+        }
     }
     rowInsert();
     formReset(docTitleInput, formStatusSelect);
-    // location.reload();
     return;
 }
 function rowInsert() {
@@ -53,21 +58,18 @@ function rowInsert() {
         tBody.innerHTML = "";
     }
     dataRender(tData);
-    formBox.classList.remove("active-popup");
+    if (formBox) {
+        formBox.classList.remove("active-popup");
+    }
 }
 function formReset(ele1, ele2) {
-    // let ele1 = document.querySelector<HTMLInputElement>("documentTitle")!.value;
     console.log({ ele1 });
     if (ele1) {
         ele1.value = "";
     }
-    console.log({ ele1 });
-    // let ele2 = document.querySelector<HTMLSelectElement>("form formStatus");
-    console.log({ ele2 });
     if (ele2) {
         ele2.selectedIndex = 0;
     }
-    console.log("FORM RESET");
 }
 let tData = [];
 const dataInLocalStorage = localStorage.getItem(key);
@@ -83,8 +85,22 @@ if (dataInLocalStorage) {
 function dataRender(data) {
     data.forEach((element) => {
         const table = document.querySelector(".content-table tbody");
+        const aboutConfig = {
+            Completed: {
+                className: "status-completed",
+                buttonText: "Download",
+            },
+            "Needs Signing": {
+                className: "status-needsSigning",
+                buttonText: "Sign Now",
+            },
+            Pending: {
+                className: "status-pill",
+                buttonText: "Preview",
+                subText: "Waiting for <strong>1 person</strong>",
+            },
+        };
         if (table) {
-            // new tr Ele
             const newRow = table.insertRow();
             newRow.id = String(element.id);
             // cell 0
@@ -94,27 +110,22 @@ function dataRender(data) {
             const cell1 = newRow.insertCell(1);
             cell1.textContent = element.doctitle;
             cell1.classList.add("titleText");
-            // cell 2
+            // cell 2:
             const cell2 = newRow.insertCell(2);
             const statusWrapper = document.createElement("div");
             const statusSpan = document.createElement("span");
+            const config = aboutConfig[element.formStatus];
             statusSpan.textContent = element.formStatus;
-            if (element.formStatus === "Completed") {
-                statusSpan.classList.add("status-completed");
+            if (config) {
+                statusSpan.classList.add(config.className);
                 statusWrapper.appendChild(statusSpan);
-            }
-            else if (element.formStatus === "Needs Signing") {
-                statusSpan.classList.add("status-needsSigning");
-                statusWrapper.appendChild(statusSpan);
-            }
-            else if (element.formStatus === "Pending") {
-                statusSpan.classList.add("status-pill");
-                const subText = document.createElement("div");
-                subText.innerHTML = `Waiting for <strong>1 person</strong>`;
-                subText.classList.add("pending-subtext");
-                statusWrapper.appendChild(statusSpan);
-                statusWrapper.appendChild(subText);
-                statusWrapper.classList.add("status-wrapper");
+                if (config.subText) {
+                    const subText = document.createElement("div");
+                    subText.innerHTML = config.subText;
+                    subText.classList.add("pending-subtext");
+                    statusWrapper.appendChild(subText);
+                    statusWrapper.classList.add("status-wrapper");
+                }
             }
             cell2.appendChild(statusWrapper);
             // Date / time
@@ -138,14 +149,8 @@ function dataRender(data) {
             const wrapBtnIcon = document.createElement("div");
             wrapBtnIcon.classList.add("wrapBtnIcon");
             const actionButton = document.createElement("button");
-            if (element.formStatus === "Completed") {
-                actionButton.textContent = "Download";
-            }
-            else if (element.formStatus === "Pending") {
-                actionButton.textContent = "Preview";
-            }
-            else if (element.formStatus === "Needs Signing") {
-                actionButton.textContent = "Sign Now";
+            if (config) {
+                actionButton.textContent = config.buttonText;
             }
             actionButton.classList.add("btn5");
             let menuBtn = document.createElement("button");
@@ -192,32 +197,27 @@ function dataRender(data) {
 }
 // Search data rendering functionality
 function searchFunction() {
-    let searchInput = document.querySelector("#searchInput");
-    if (searchInput) {
-        const searchInputValue = searchInput.value.trim().toLowerCase();
-        let searchData = tData.filter((ele) => String(ele.doctitle).trim().toLowerCase() ===
-            String(searchInputValue).toLowerCase());
-        if (searchInputValue.length === 0 && searchData.length === 0) {
-            searchDataRender(tData);
-        }
-        else if (searchInputValue.length > 0 && searchData.length > 0) {
-            searchDataRender(searchData);
-        }
-        else if (searchInputValue.length > 0 && searchData.length === 0) {
-            reloadWindowAfterAlert();
-        }
+    const searchInput = document.querySelector("#searchInput");
+    if (!searchInput)
+        return;
+    const searchInputValue = searchInput.value.trim().toLowerCase();
+    const searchData = tData.filter((ele) => String(ele.doctitle).toLowerCase().includes(searchInputValue));
+    const tBody = document.querySelector("tBody");
+    if (tBody)
+        tBody.innerHTML = "";
+    if (searchInputValue.length === 0) {
+        dataRender(tData);
+    }
+    else if (searchData.length > 0) {
+        dataRender(searchData);
+    }
+    else {
+        reloadWindowAfterAlert();
     }
 }
 function reloadWindowAfterAlert() {
     alert("No matched item");
     window.location.reload();
-}
-function searchDataRender(searchData) {
-    let tBody = document.querySelector("tBody");
-    if (tBody) {
-        tBody.innerHTML = "";
-    }
-    dataRender(searchData);
 }
 const selectAllCheckbox = document.querySelector("#selectAllCheckbox");
 if (selectAllCheckbox) {
@@ -264,7 +264,7 @@ if (tableBody) {
         const target = e.target;
         if (target instanceof HTMLElement) {
             const editBtn = target.closest(".edit-btn");
-            if (editBtn) {
+            if (editBtn && formBox) {
                 editRowId = editBtn.id;
                 putDataInForm(editRowId);
                 formBox.classList.add("active-popup");
@@ -272,7 +272,7 @@ if (tableBody) {
             const deleteBtn = target.closest(".delete-btn");
             if (deleteBtn) {
                 let deleteBtnId = deleteBtn.id;
-                tData = tData.filter((ele) => !deleteBtnId.includes(String(ele.id)));
+                tData = tData.filter((ele) => deleteBtnId.includes(String(ele.id)));
                 saveData();
                 rowInsert();
             }

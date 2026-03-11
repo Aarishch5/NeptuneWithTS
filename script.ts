@@ -1,17 +1,17 @@
-let formBox = document.querySelector<HTMLDivElement>(".formBox")!;
+let formBox = document.querySelector<HTMLDivElement>(".formBox");
 
 let btnToCancelForm = document.querySelector<HTMLButtonElement>(
   ".form-cancel-button",
 );
 let addBtn = document.querySelector<HTMLButtonElement>("#add");
 
-if (addBtn) {
+if (addBtn && formBox) {
   addBtn.addEventListener("click", () => {
     formBox.classList.add("active-popup");
   });
 }
 
-if (btnToCancelForm) {
+if (btnToCancelForm && formBox) {
   btnToCancelForm.addEventListener("click", () => {
     formBox.classList.remove("active-popup");
   });
@@ -24,7 +24,7 @@ declare const DOMPurify: {
 // key for the data local storage tabele
 const key: string = "tableData";
 
-function saveData(): void {
+function saveData() {
   localStorage.setItem(key, JSON.stringify(tData));
 }
 
@@ -38,19 +38,22 @@ function addRowData(
   saveData();
 }
 
-function onFormSubmit(): void {
+function onFormSubmit() {
   const docTitleInput =
     document.querySelector<HTMLInputElement>("#documentTitle");
   const docTitle = docTitleInput?.value;
   const formStatusSelect =
     document.querySelector<HTMLSelectElement>("#formStatus");
   const formStatusValue =
-    document.querySelector<HTMLSelectElement>("#formStatus")!.value;
+    document.querySelector<HTMLSelectElement>("#formStatus")?.value;
 
   const docAddEditDate: number = Date.now();
+  let indexVal: number = -1;
 
-  let indexVal: number =
-    document.querySelector<HTMLSelectElement>("#formStatus")!.selectedIndex;
+  let index1 = document.querySelector<HTMLSelectElement>("#formStatus");
+  if (index1) {
+    indexVal = index1?.selectedIndex;
+  }
 
   if (docTitle?.trim() === "" || indexVal === 0) {
     alert("empty Fields");
@@ -58,49 +61,44 @@ function onFormSubmit(): void {
   }
 
   const doctitle: string = DOMPurify.sanitize(docTitle || "");
-  const formStatus: string = DOMPurify.sanitize(formStatusValue);
-
-  if (editRowId) {
-    upDateRowData(doctitle, formStatus, docAddEditDate);
-  } else {
-    const id: number = Date.now();
-    addRowData(id, doctitle, formStatus, docAddEditDate);
+  if (formStatusValue) {
+    const formStatus: string = DOMPurify.sanitize(formStatusValue);
+    if (editRowId) {
+      upDateRowData(doctitle, formStatus, docAddEditDate);
+    } else {
+      const id: number = Date.now();
+      addRowData(id, doctitle, formStatus, docAddEditDate);
+    }
   }
 
   rowInsert();
   formReset(docTitleInput, formStatusSelect);
 
-  // location.reload();
-
   return;
 }
 
-function rowInsert(): void {
+function rowInsert() {
   const tBody = document.querySelector<HTMLTableSectionElement>("tbody");
   if (tBody) {
     tBody.innerHTML = "";
   }
   dataRender(tData);
-  formBox.classList.remove("active-popup");
+  if (formBox) {
+    formBox.classList.remove("active-popup");
+  }
 }
 
 function formReset(
   ele1: HTMLInputElement | null,
   ele2: HTMLSelectElement | null,
-): void {
-  // let ele1 = document.querySelector<HTMLInputElement>("documentTitle")!.value;
+) {
   console.log({ ele1 });
   if (ele1) {
     ele1.value = "";
   }
-  console.log({ ele1 });
-
-  // let ele2 = document.querySelector<HTMLSelectElement>("form formStatus");
-  console.log({ ele2 });
   if (ele2) {
     ele2.selectedIndex = 0;
   }
-  console.log("FORM RESET");
 }
 
 type dataSet = {
@@ -123,13 +121,32 @@ if (dataInLocalStorage) {
 
 // Dataa render function
 
-function dataRender(data: dataSet[]): void {
+function dataRender(data: dataSet[]) {
   data.forEach((element) => {
     const table = document.querySelector<HTMLTableSectionElement>(
       ".content-table tbody",
     );
+
+    const aboutConfig: Record<
+      string,
+      { className: string; buttonText: string; subText?: string }
+    > = {
+      Completed: {
+        className: "status-completed",
+        buttonText: "Download",
+      },
+      "Needs Signing": {
+        className: "status-needsSigning",
+        buttonText: "Sign Now",
+      },
+      Pending: {
+        className: "status-pill",
+        buttonText: "Preview",
+        subText: "Waiting for <strong>1 person</strong>",
+      },
+    };
+
     if (table) {
-      // new tr Ele
       const newRow: HTMLTableRowElement = table.insertRow();
       newRow.id = String(element.id);
 
@@ -142,29 +159,25 @@ function dataRender(data: dataSet[]): void {
       cell1.textContent = element.doctitle;
       cell1.classList.add("titleText");
 
-      // cell 2
+      // cell 2:
       const cell2: HTMLTableCellElement = newRow.insertCell(2);
       const statusWrapper: HTMLDivElement = document.createElement("div");
 
       const statusSpan: HTMLSpanElement = document.createElement("span");
+      const config = aboutConfig[element.formStatus];
+
       statusSpan.textContent = element.formStatus;
-
-      if (element.formStatus === "Completed") {
-        statusSpan.classList.add("status-completed");
+      if (config) {
+        statusSpan.classList.add(config.className);
         statusWrapper.appendChild(statusSpan);
-      } else if (element.formStatus === "Needs Signing") {
-        statusSpan.classList.add("status-needsSigning");
-        statusWrapper.appendChild(statusSpan);
-      } else if (element.formStatus === "Pending") {
-        statusSpan.classList.add("status-pill");
 
-        const subText: HTMLDivElement = document.createElement("div");
-        subText.innerHTML = `Waiting for <strong>1 person</strong>`;
-        subText.classList.add("pending-subtext");
-
-        statusWrapper.appendChild(statusSpan);
-        statusWrapper.appendChild(subText);
-        statusWrapper.classList.add("status-wrapper");
+        if (config.subText) {
+          const subText = document.createElement("div");
+          subText.innerHTML = config.subText;
+          subText.classList.add("pending-subtext");
+          statusWrapper.appendChild(subText);
+          statusWrapper.classList.add("status-wrapper");
+        }
       }
 
       cell2.appendChild(statusWrapper);
@@ -196,13 +209,8 @@ function dataRender(data: dataSet[]): void {
       wrapBtnIcon.classList.add("wrapBtnIcon");
 
       const actionButton: HTMLButtonElement = document.createElement("button");
-
-      if (element.formStatus === "Completed") {
-        actionButton.textContent = "Download";
-      } else if (element.formStatus === "Pending") {
-        actionButton.textContent = "Preview";
-      } else if (element.formStatus === "Needs Signing") {
-        actionButton.textContent = "Sign Now";
+      if (config) {
+        actionButton.textContent = config.buttonText;
       }
 
       actionButton.classList.add("btn5");
@@ -261,39 +269,31 @@ function dataRender(data: dataSet[]): void {
 }
 
 // Search data rendering functionality
+function searchFunction() {
+  const searchInput = document.querySelector<HTMLInputElement>("#searchInput");
+  if (!searchInput) return;
 
-function searchFunction(): void {
-  let searchInput = document.querySelector<HTMLInputElement>("#searchInput");
-  if (searchInput) {
-    const searchInputValue: string = searchInput.value.trim().toLowerCase();
+  const searchInputValue = searchInput.value.trim().toLowerCase();
 
-    let searchData: dataSet[] = tData.filter(
-      (ele) =>
-        String(ele.doctitle).trim().toLowerCase() ===
-        String(searchInputValue).toLowerCase(),
-    );
+  const searchData: dataSet[] = tData.filter((ele) =>
+    String(ele.doctitle).toLowerCase().includes(searchInputValue),
+  );
 
-    if (searchInputValue.length === 0 && searchData.length === 0) {
-      searchDataRender(tData);
-    } else if (searchInputValue.length > 0 && searchData.length > 0) {
-      searchDataRender(searchData);
-    } else if (searchInputValue.length > 0 && searchData.length === 0) {
-      reloadWindowAfterAlert();
-    }
+  const tBody = document.querySelector<HTMLTableSectionElement>("tBody");
+  if (tBody) tBody.innerHTML = "";
+
+  if (searchInputValue.length === 0) {
+    dataRender(tData);
+  } else if (searchData.length > 0) {
+    dataRender(searchData);
+  } else {
+    reloadWindowAfterAlert();
   }
 }
 
-function reloadWindowAfterAlert(): void {
+function reloadWindowAfterAlert() {
   alert("No matched item");
   window.location.reload();
-}
-
-function searchDataRender(searchData: dataSet[]): void {
-  let tBody = document.querySelector<HTMLTableSectionElement>("tBody");
-  if (tBody) {
-    tBody.innerHTML = "";
-  }
-  dataRender(searchData);
 }
 
 const selectAllCheckbox =
@@ -368,7 +368,7 @@ if (tableBody) {
     const target = e.target;
     if (target instanceof HTMLElement) {
       const editBtn = target.closest(".edit-btn");
-      if (editBtn) {
+      if (editBtn && formBox) {
         editRowId = editBtn.id;
         putDataInForm(editRowId);
         formBox.classList.add("active-popup");
@@ -377,7 +377,7 @@ if (tableBody) {
       const deleteBtn = target.closest(".delete-btn");
       if (deleteBtn) {
         let deleteBtnId: string = deleteBtn.id;
-        tData = tData.filter((ele) => !deleteBtnId.includes(String(ele.id)));
+        tData = tData.filter((ele) => deleteBtnId.includes(String(ele.id)));
         saveData();
         rowInsert();
       }
@@ -385,7 +385,7 @@ if (tableBody) {
   });
 }
 
-function putDataInForm(btnId: string): void {
+function putDataInForm(btnId: string) {
   tData.forEach((ele) => {
     if (String(ele.id) === btnId) {
       const docTitleInput =
@@ -409,7 +409,7 @@ function upDateRowData(
   doctitle: string,
   formStatus: string,
   docAddEditDate: number,
-): void {
+) {
   const row = tData.find((ele) => String(ele.id) === String(editRowId));
 
   // if  row not found

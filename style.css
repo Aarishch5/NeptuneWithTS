@@ -226,6 +226,10 @@ main {
   align-items: center;
 }
 
+#right-middle-right #multiDelete:hover{
+    background-color: rgb(250, 93, 93);
+    color: black;
+}
 
 #right-middle-right #multiDelete,
 #right-middle-right #add {
@@ -262,7 +266,6 @@ main {
   padding-left: 10px;
 }
 
-/* Search button */
 #right-middle form button {
   width: 25px;
   height: 25px;
@@ -449,6 +452,7 @@ table tr select {
 
 .dropdown-menu {
   position: absolute;
+  right: 20px;
   background-color: var(--primary-color);
   border: 1px solid #ccc;
   z-index: 100;
@@ -458,13 +462,19 @@ table tr select {
 }
 
 .dropdown-menu button {
+  color: #1f4451;
+  border: 1px solid #878b94;
   display: block;
   width: 100%;
-  margin: 2px 0;
+  margin: 4px 0;
   padding: 5px;
   border-radius: 8px;
   cursor: pointer;
   font-family: var(--primary-font-family);
+}
+
+.delete-btn{
+  background-color: rgb(248, 87, 87);
 }
 
 .status-wrapper {

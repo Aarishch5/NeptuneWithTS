@@ -83,9 +83,9 @@
           </div>
 
           <div id="search">
-            <form action="" onsubmit="event.preventDefault();searchFunction();"
+            <form action="" onsubmit="event.preventDefault();"
               autocomplete="off">
-              <input id="searchInput" type="text" placeholder="Search documents" name="q"/>
+              <input oninput="searchFunction();" id="searchInput" type="text" placeholder="Search documents" name="q"/>
               <button type="submit"><img src="images/Layer_1.svg" /></button>
             </form>
           </div>
