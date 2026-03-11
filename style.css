@@ -243,6 +243,10 @@ main {
   color: #878b94;
 }
 
+#formStatus{
+  color: #1f4451;
+}
+
 #right-middle #search {
   display: flex;
   align-items: center;
@@ -419,18 +423,28 @@ table tr select {
   background-color: var(--primary-color);
   cursor: pointer;
   border-radius: 6px;
+  color: #1f4451;
+
 }
 
-#addCancelForm .input1 {
+#addCancelForm .input1, #addCancelForm .input2 {
   display: flex;
   flex-direction: column;
   gap: 10px;
   font-size: 16px;
 }
 
-#addCancelForm .input1 input, #addCancelForm .input1 select {
-  height: 5vh;
+#addCancelForm .input1 input, #addCancelForm .input1 select, #addCancelForm .input2 input {
+  height: 40px;
   padding: 10px;
+}
+
+ #addCancelForm .input2 input {
+  width: 378px;
+ }
+
+#addCancelForm #input2{
+  display: none;
 }
 
 .menubtn1 {

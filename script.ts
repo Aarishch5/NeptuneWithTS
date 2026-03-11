@@ -88,11 +88,70 @@ function rowInsert() {
   }
 }
 
+
+const input2Div = document.querySelector<HTMLDivElement>("#input2");
+const formStatus = document.querySelector<HTMLSelectElement>("#formStatus");
+const personWaitingInput = document.querySelector<HTMLInputElement>('#personPending');
+
+if (formStatus && input2Div) {
+  const toggleInput2 = () => {
+    if (formStatus.value === "Pending") {
+      input2Div.style.display = "block";
+    } else {
+      input2Div.style.display = "none";
+    }
+  };
+
+  // Initialize display
+  toggleInput2();
+
+  // Toggle on select change
+  formStatus.addEventListener("change", toggleInput2);
+
+  // Listen to input changes
+  if (personWaitingInput) {
+    personWaitingInput.addEventListener("input", () => {
+      console.log("Person Waiting:", personWaitingInput.value);
+    });
+  }
+}
+
+// const input2Div = document.querySelector<HTMLDivElement>("#input2");
+// const formStatus = document.querySelector<HTMLSelectElement>("#formStatus");
+
+// if (formStatus && input2Div) {
+//   formStatus.addEventListener("change", () => {
+//     const personWaitingInput = document.querySelector<HTMLInputElement>('#personPending');
+
+//     if(personWaitingInput){
+//     console.log(personWaitingInput.value);
+//     }    
+    
+//     if (formStatus.value === "Pending") {
+//       input2Div.style.display = "block"; 
+//     } else {
+//       input2Div.style.display = "none"; 
+//     }
+//   });
+// }
+// console.log(input2Div);
+// console.log(formStatusValue);
+
+// if(formStatusValue && input2Div){
+
+//   formStatus.addEventListener("change", () => {
+//   if (formStatusVa === "Pending") {
+//     input2Div.classList.add("changeClasssInput2");
+//   } else {
+//     input2Div.classList.remove("changeClasssInput2");
+//   }
+// });
+// }
+
 function formReset(
   ele1: HTMLInputElement | null,
   ele2: HTMLSelectElement | null,
 ) {
-
   console.log({ ele1 });
   if (ele1) {
     ele1.value = "";
@@ -101,7 +160,6 @@ function formReset(
   if (ele1) {
     ele1.value = "";
   }
-
 
   if (ele2) {
     ele2.selectedIndex = 0;
@@ -136,7 +194,12 @@ function dataRender(data: dataSet[]) {
 
     const aboutConfig: Record<
       string,
-      { className: string; buttonText: string; subText?: string }
+      {
+        className: string;
+        buttonText: string;
+        subText?: string;
+        persons?: number;
+      }
     > = {
       Completed: {
         className: "status-completed",
@@ -150,6 +213,7 @@ function dataRender(data: dataSet[]) {
         className: "status-pill",
         buttonText: "Preview",
         subText: "Waiting for <strong>1 person</strong>",
+        persons: 1,
       },
     };
 
