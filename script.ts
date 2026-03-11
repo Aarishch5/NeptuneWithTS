@@ -92,10 +92,17 @@ function formReset(
   ele1: HTMLInputElement | null,
   ele2: HTMLSelectElement | null,
 ) {
+
   console.log({ ele1 });
   if (ele1) {
     ele1.value = "";
   }
+
+  if (ele1) {
+    ele1.value = "";
+  }
+
+
   if (ele2) {
     ele2.selectedIndex = 0;
   }

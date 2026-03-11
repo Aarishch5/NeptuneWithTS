@@ -63,6 +63,7 @@ function rowInsert() {
     }
 }
 function formReset(ele1, ele2) {
+    // let ele1 = document.querySelector<HTMLInputElement>("documentTitle")!.value;
     console.log({ ele1 });
     if (ele1) {
         ele1.value = "";
