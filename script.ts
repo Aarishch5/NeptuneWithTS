@@ -349,7 +349,7 @@ function searchFunction() {
     String(ele.doctitle).toLowerCase().includes(searchInputValue),
   );
 
-  const tBody = document.querySelector<HTMLTableSectionElement>("tBody");
+  const tBody = document.querySelector<HTMLTableSectionElement>("tbody");
   if (tBody) tBody.innerHTML = "";
 
   if (searchInputValue.length === 0) {

@@ -242,7 +242,7 @@ function searchFunction() {
         return;
     const searchInputValue = searchInput.value.trim().toLowerCase();
     const searchData = tData.filter((ele) => String(ele.doctitle).toLowerCase().includes(searchInputValue));
-    const tBody = document.querySelector("tBody");
+    const tBody = document.querySelector("tbody");
     if (tBody)
         tBody.innerHTML = "";
     if (searchInputValue.length === 0) {
