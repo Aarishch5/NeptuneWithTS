@@ -5,6 +5,12 @@ let btnToCancelForm = document.querySelector<HTMLButtonElement>(
 );
 let addBtn = document.querySelector<HTMLButtonElement>("#add");
 
+const formStatusObj={
+  pending:"Pending",
+  needsSigning:"Needs Signing",
+  completed:"Completed"
+}
+
 if (addBtn && formBox) {
   addBtn.addEventListener("click", () => {
     formBox.classList.add("active-popup");
@@ -14,6 +20,17 @@ if (addBtn && formBox) {
 if (btnToCancelForm && formBox) {
   btnToCancelForm.addEventListener("click", () => {
     formBox.classList.remove("active-popup");
+    const docTitleInput =
+    document.querySelector<HTMLInputElement>("#documentTitle");
+  const formStatusSelect =
+    document.querySelector<HTMLSelectElement>("#formStatus");
+  const personWaitingInput =
+    document.querySelector<HTMLInputElement>("#personPending");
+  const formStatusValue = formReset(
+    docTitleInput,
+    formStatusSelect,
+    personWaitingInput,
+  );
   });
 }
 
@@ -33,10 +50,12 @@ function addRowData(
   doctitle: string,
   formStatus: string,
   docAddEditDate: number,
+  personWaiting: number | null,
 ) {
-  tData.push({ id, doctitle, formStatus, docAddEditDate });
+  tData.push({ id, doctitle, formStatus, docAddEditDate, personWaiting });
   saveData();
 }
+
 
 function onFormSubmit() {
   const docTitleInput =
@@ -49,6 +68,15 @@ function onFormSubmit() {
 
   const docAddEditDate: number = Date.now();
   let indexVal: number = -1;
+
+  const personWaitingInput =
+    document.querySelector<HTMLInputElement>("#personPending");
+
+  let personWaiting: number | null = null;
+
+  if (formStatusValue === formStatusObj.pending && personWaitingInput?.value) {
+    personWaiting = Number(personWaitingInput.value);
+  }
 
   let index1 = document.querySelector<HTMLSelectElement>("#formStatus");
   if (index1) {
@@ -64,15 +92,15 @@ function onFormSubmit() {
   if (formStatusValue) {
     const formStatus: string = DOMPurify.sanitize(formStatusValue);
     if (editRowId) {
-      upDateRowData(doctitle, formStatus, docAddEditDate);
+      upDateRowData(doctitle, formStatus, docAddEditDate, personWaiting);
     } else {
       const id: number = Date.now();
-      addRowData(id, doctitle, formStatus, docAddEditDate);
+      addRowData(id, doctitle, formStatus, docAddEditDate, personWaiting);
     }
   }
 
   rowInsert();
-  formReset(docTitleInput, formStatusSelect);
+  formReset(docTitleInput, formStatusSelect, personWaitingInput);
 
   return;
 }
@@ -88,10 +116,10 @@ function rowInsert() {
   }
 }
 
-
 const input2Div = document.querySelector<HTMLDivElement>("#input2");
 const formStatus = document.querySelector<HTMLSelectElement>("#formStatus");
-const personWaitingInput = document.querySelector<HTMLInputElement>('#personPending');
+const personWaitingInput =
+  document.querySelector<HTMLInputElement>("#personPending");
 
 if (formStatus && input2Div) {
   const toggleInput2 = () => {
@@ -102,13 +130,10 @@ if (formStatus && input2Div) {
     }
   };
 
-  // Initialize display
   toggleInput2();
 
-  // Toggle on select change
   formStatus.addEventListener("change", toggleInput2);
 
-  // Listen to input changes
   if (personWaitingInput) {
     personWaitingInput.addEventListener("input", () => {
       console.log("Person Waiting:", personWaitingInput.value);
@@ -116,53 +141,25 @@ if (formStatus && input2Div) {
   }
 }
 
-// const input2Div = document.querySelector<HTMLDivElement>("#input2");
-// const formStatus = document.querySelector<HTMLSelectElement>("#formStatus");
-
-// if (formStatus && input2Div) {
-//   formStatus.addEventListener("change", () => {
-//     const personWaitingInput = document.querySelector<HTMLInputElement>('#personPending');
-
-//     if(personWaitingInput){
-//     console.log(personWaitingInput.value);
-//     }    
-    
-//     if (formStatus.value === "Pending") {
-//       input2Div.style.display = "block"; 
-//     } else {
-//       input2Div.style.display = "none"; 
-//     }
-//   });
-// }
-// console.log(input2Div);
-// console.log(formStatusValue);
-
-// if(formStatusValue && input2Div){
-
-//   formStatus.addEventListener("change", () => {
-//   if (formStatusVa === "Pending") {
-//     input2Div.classList.add("changeClasssInput2");
-//   } else {
-//     input2Div.classList.remove("changeClasssInput2");
-//   }
-// });
-// }
-
 function formReset(
   ele1: HTMLInputElement | null,
   ele2: HTMLSelectElement | null,
+  ele3: HTMLInputElement | null,
 ) {
   console.log({ ele1 });
   if (ele1) {
     ele1.value = "";
   }
 
-  if (ele1) {
-    ele1.value = "";
-  }
-
   if (ele2) {
     ele2.selectedIndex = 0;
+  }
+
+  if (ele3) {
+    ele3.value = "";
+  }
+  if (input2Div) {
+    input2Div.style.display = "none";
   }
 }
 
@@ -171,6 +168,7 @@ type dataSet = {
   doctitle: string;
   formStatus: string;
   docAddEditDate: number;
+  personWaiting: number | null;
 };
 
 let tData: dataSet[] = [];
@@ -212,8 +210,6 @@ function dataRender(data: dataSet[]) {
       Pending: {
         className: "status-pill",
         buttonText: "Preview",
-        subText: "Waiting for <strong>1 person</strong>",
-        persons: 1,
       },
     };
 
@@ -242,9 +238,12 @@ function dataRender(data: dataSet[]) {
         statusSpan.classList.add(config.className);
         statusWrapper.appendChild(statusSpan);
 
-        if (config.subText) {
+        if (
+          element.formStatus === "Pending" &&
+          element.personWaiting !== null
+        ) {
           const subText = document.createElement("div");
-          subText.innerHTML = config.subText;
+          subText.innerHTML = `Waiting for <strong>${element.personWaiting} person</strong>`;
           subText.classList.add("pending-subtext");
           statusWrapper.appendChild(subText);
           statusWrapper.classList.add("status-wrapper");
@@ -357,15 +356,10 @@ function searchFunction() {
     dataRender(tData);
   } else if (searchData.length > 0) {
     dataRender(searchData);
-  } else {
-    reloadWindowAfterAlert();
-  }
+  } 
 }
 
-function reloadWindowAfterAlert() {
-  alert("No matched item");
-  window.location.reload();
-}
+
 
 const selectAllCheckbox =
   document.querySelector<HTMLInputElement>("#selectAllCheckbox");
@@ -428,7 +422,6 @@ if (multiDeleteBtn) {
 }
 
 // Edit Functionality
-
 let editRowId: string | null = null;
 const tableBody = document.querySelector<HTMLTableSectionElement>(
   ".content-table tbody",
@@ -442,6 +435,9 @@ if (tableBody) {
       if (editBtn && formBox) {
         editRowId = editBtn.id;
         putDataInForm(editRowId);
+        if(input2Div){
+        input2Div.style.display = "block";
+        }
         formBox.classList.add("active-popup");
       }
 
@@ -472,6 +468,10 @@ function putDataInForm(btnId: string) {
       if (formStatusInput) {
         formStatusInput.value = ele.formStatus;
       }
+
+      if (personWaitingInput) {
+        personWaitingInput.value = String(ele.personWaiting);
+      }
     }
   });
 }
@@ -480,6 +480,7 @@ function upDateRowData(
   doctitle: string,
   formStatus: string,
   docAddEditDate: number,
+  personWaiting: number | null,
 ) {
   const row = tData.find((ele) => String(ele.id) === String(editRowId));
 
@@ -491,13 +492,20 @@ function upDateRowData(
   row.doctitle = doctitle;
   row.formStatus = formStatus;
   row.docAddEditDate = docAddEditDate;
+  row.personWaiting = personWaiting;
 
   saveData();
   const docTitleInput =
     document.querySelector<HTMLInputElement>("#documentTitle");
   const formStatusSelect =
     document.querySelector<HTMLSelectElement>("#formStatus");
-  const formStatusValue = formReset(docTitleInput, formStatusSelect);
+  const personWaitingInput =
+    document.querySelector<HTMLInputElement>("#personPending");
+  const formStatusValue = formReset(
+    docTitleInput,
+    formStatusSelect,
+    personWaitingInput,
+  );
   editRowId = null;
 }
 

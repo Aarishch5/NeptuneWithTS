@@ -1,8 +1,13 @@
 "use strict";
-// Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", { value: true });
 let formBox = document.querySelector(".formBox");
 let btnToCancelForm = document.querySelector(".form-cancel-button");
 let addBtn = document.querySelector("#add");
+const formStatusObj = {
+    pending: "Pending",
+    needsSigning: "Needs Signing",
+    completed: "Completed"
+};
 if (addBtn && formBox) {
     addBtn.addEventListener("click", () => {
         formBox.classList.add("active-popup");
@@ -11,6 +16,10 @@ if (addBtn && formBox) {
 if (btnToCancelForm && formBox) {
     btnToCancelForm.addEventListener("click", () => {
         formBox.classList.remove("active-popup");
+        const docTitleInput = document.querySelector("#documentTitle");
+        const formStatusSelect = document.querySelector("#formStatus");
+        const personWaitingInput = document.querySelector("#personPending");
+        const formStatusValue = formReset(docTitleInput, formStatusSelect, personWaitingInput);
     });
 }
 // key for the data local storage tabele
@@ -18,8 +27,8 @@ const key = "tableData";
 function saveData() {
     localStorage.setItem(key, JSON.stringify(tData));
 }
-function addRowData(id, doctitle, formStatus, docAddEditDate) {
-    tData.push({ id, doctitle, formStatus, docAddEditDate });
+function addRowData(id, doctitle, formStatus, docAddEditDate, personWaiting) {
+    tData.push({ id, doctitle, formStatus, docAddEditDate, personWaiting });
     saveData();
 }
 function onFormSubmit() {
@@ -29,6 +38,11 @@ function onFormSubmit() {
     const formStatusValue = document.querySelector("#formStatus")?.value;
     const docAddEditDate = Date.now();
     let indexVal = -1;
+    const personWaitingInput = document.querySelector("#personPending");
+    let personWaiting = null;
+    if (formStatusValue === formStatusObj.pending && personWaitingInput?.value) {
+        personWaiting = Number(personWaitingInput.value);
+    }
     let index1 = document.querySelector("#formStatus");
     if (index1) {
         indexVal = index1?.selectedIndex;
@@ -41,15 +55,15 @@ function onFormSubmit() {
     if (formStatusValue) {
         const formStatus = DOMPurify.sanitize(formStatusValue);
         if (editRowId) {
-            upDateRowData(doctitle, formStatus, docAddEditDate);
+            upDateRowData(doctitle, formStatus, docAddEditDate, personWaiting);
         }
         else {
             const id = Date.now();
-            addRowData(id, doctitle, formStatus, docAddEditDate);
+            addRowData(id, doctitle, formStatus, docAddEditDate, personWaiting);
         }
     }
     rowInsert();
-    formReset(docTitleInput, formStatusSelect);
+    formReset(docTitleInput, formStatusSelect, personWaitingInput);
     return;
 }
 function rowInsert() {
@@ -64,7 +78,7 @@ function rowInsert() {
 }
 const input2Div = document.querySelector("#input2");
 const formStatus = document.querySelector("#formStatus");
-const personWaitingInput = document.querySelector('#personPending');
+const personWaitingInput = document.querySelector("#personPending");
 if (formStatus && input2Div) {
     const toggleInput2 = () => {
         if (formStatus.value === "Pending") {
@@ -74,53 +88,27 @@ if (formStatus && input2Div) {
             input2Div.style.display = "none";
         }
     };
-    // Initialize display
     toggleInput2();
-    // Toggle on select change
     formStatus.addEventListener("change", toggleInput2);
-    // Listen to input changes
     if (personWaitingInput) {
         personWaitingInput.addEventListener("input", () => {
             console.log("Person Waiting:", personWaitingInput.value);
         });
     }
 }
-// const input2Div = document.querySelector<HTMLDivElement>("#input2");
-// const formStatus = document.querySelector<HTMLSelectElement>("#formStatus");
-// if (formStatus && input2Div) {
-//   formStatus.addEventListener("change", () => {
-//     const personWaitingInput = document.querySelector<HTMLInputElement>('#personPending');
-//     if(personWaitingInput){
-//     console.log(personWaitingInput.value);
-//     }    
-//     if (formStatus.value === "Pending") {
-//       input2Div.style.display = "block"; 
-//     } else {
-//       input2Div.style.display = "none"; 
-//     }
-//   });
-// }
-// console.log(input2Div);
-// console.log(formStatusValue);
-// if(formStatusValue && input2Div){
-//   formStatus.addEventListener("change", () => {
-//   if (formStatusVa === "Pending") {
-//     input2Div.classList.add("changeClasssInput2");
-//   } else {
-//     input2Div.classList.remove("changeClasssInput2");
-//   }
-// });
-// }
-function formReset(ele1, ele2) {
+function formReset(ele1, ele2, ele3) {
     console.log({ ele1 });
-    if (ele1) {
-        ele1.value = "";
-    }
     if (ele1) {
         ele1.value = "";
     }
     if (ele2) {
         ele2.selectedIndex = 0;
+    }
+    if (ele3) {
+        ele3.value = "";
+    }
+    if (input2Div) {
+        input2Div.style.display = "none";
     }
 }
 let tData = [];
@@ -149,8 +137,6 @@ function dataRender(data) {
             Pending: {
                 className: "status-pill",
                 buttonText: "Preview",
-                subText: "Waiting for <strong>1 person</strong>",
-                persons: 1,
             },
         };
         if (table) {
@@ -172,9 +158,10 @@ function dataRender(data) {
             if (config) {
                 statusSpan.classList.add(config.className);
                 statusWrapper.appendChild(statusSpan);
-                if (config.subText) {
+                if (element.formStatus === "Pending" &&
+                    element.personWaiting !== null) {
                     const subText = document.createElement("div");
-                    subText.innerHTML = config.subText;
+                    subText.innerHTML = `Waiting for <strong>${element.personWaiting} person</strong>`;
                     subText.classList.add("pending-subtext");
                     statusWrapper.appendChild(subText);
                     statusWrapper.classList.add("status-wrapper");
@@ -264,13 +251,6 @@ function searchFunction() {
     else if (searchData.length > 0) {
         dataRender(searchData);
     }
-    else {
-        reloadWindowAfterAlert();
-    }
-}
-function reloadWindowAfterAlert() {
-    alert("No matched item");
-    window.location.reload();
 }
 const selectAllCheckbox = document.querySelector("#selectAllCheckbox");
 if (selectAllCheckbox) {
@@ -320,6 +300,9 @@ if (tableBody) {
             if (editBtn && formBox) {
                 editRowId = editBtn.id;
                 putDataInForm(editRowId);
+                if (input2Div) {
+                    input2Div.style.display = "block";
+                }
                 formBox.classList.add("active-popup");
             }
             const deleteBtn = target.closest(".delete-btn");
@@ -343,10 +326,13 @@ function putDataInForm(btnId) {
             if (formStatusInput) {
                 formStatusInput.value = ele.formStatus;
             }
+            if (personWaitingInput) {
+                personWaitingInput.value = String(ele.personWaiting);
+            }
         }
     });
 }
-function upDateRowData(doctitle, formStatus, docAddEditDate) {
+function upDateRowData(doctitle, formStatus, docAddEditDate, personWaiting) {
     const row = tData.find((ele) => String(ele.id) === String(editRowId));
     // if  row not found
     if (!row) {
@@ -355,10 +341,12 @@ function upDateRowData(doctitle, formStatus, docAddEditDate) {
     row.doctitle = doctitle;
     row.formStatus = formStatus;
     row.docAddEditDate = docAddEditDate;
+    row.personWaiting = personWaiting;
     saveData();
     const docTitleInput = document.querySelector("#documentTitle");
     const formStatusSelect = document.querySelector("#formStatus");
-    const formStatusValue = formReset(docTitleInput, formStatusSelect);
+    const personWaitingInput = document.querySelector("#personPending");
+    const formStatusValue = formReset(docTitleInput, formStatusSelect, personWaitingInput);
     editRowId = null;
 }
 window.addEventListener("load", () => {
