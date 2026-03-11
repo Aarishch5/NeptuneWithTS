@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+// Object.defineProperty(exports, "__esModule", { value: true });
 let formBox = document.querySelector(".formBox");
 let btnToCancelForm = document.querySelector(".form-cancel-button");
 let addBtn = document.querySelector("#add");
